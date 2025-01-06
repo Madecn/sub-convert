@@ -4359,7 +4359,7 @@ function Jn(e, i) {
                         #model = {
                             target: 'clash',
                             config: 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online.ini',
-                            backend: 'http://localhost:8787',
+                            backend: '${n[0].value}',
                             advanced: ['emoji', 'new_name'],
                             shortServe: '',
 
