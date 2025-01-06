@@ -159,10 +159,10 @@ function mi() {
     arguments[i].forEach(n);
   return e;
 }
-function Ye(e) {
+function $e(e) {
   return this.extend(e);
 }
-Ye.prototype.extend = function(i) {
+$e.prototype.extend = function(i) {
   var t = [], n = [];
   if (i instanceof S)
     n.push(i);
@@ -183,10 +183,10 @@ Ye.prototype.extend = function(i) {
     if (!(s instanceof S))
       throw new O("Specified list of YAML types (or a single Type object) contains a non-Type object.");
   });
-  var r = Object.create(Ye.prototype);
+  var r = Object.create($e.prototype);
   return r.implicit = (this.implicit || []).concat(t), r.explicit = (this.explicit || []).concat(n), r.compiledImplicit = it(r, "implicit"), r.compiledExplicit = it(r, "explicit"), r.compiledTypeMap = mi(r.compiledImplicit, r.compiledExplicit), r;
 };
-var gi = Ye, bi = new S("tag:yaml.org,2002:str", {
+var gi = $e, bi = new S("tag:yaml.org,2002:str", {
   kind: "scalar",
   construct: function(e) {
     return e !== null ? e : "";
@@ -418,14 +418,14 @@ var ji = new S("tag:yaml.org,2002:float", {
   predicate: Vi,
   represent: Bi,
   defaultStyle: "lowercase"
-}), Yi = Ci.extend({
+}), $i = Ci.extend({
   implicit: [
     Si,
     Li,
     Pi,
     ji
   ]
-}), $i = Yi, wt = new RegExp(
+}), Yi = $i, wt = new RegExp(
   "^([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9])$"
 ), yt = new RegExp(
   "^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)(?:[Tt]|[ \\t]+)([0-9][0-9]?):([0-9][0-9]):([0-9][0-9])(?:\\.([0-9]*))?(?:[ \\t]*(Z|([-+])([0-9][0-9]?)(?::([0-9][0-9]))?))?$"
@@ -554,7 +554,7 @@ var fr = new S("tag:yaml.org,2002:set", {
   kind: "mapping",
   resolve: hr,
   construct: dr
-}), _t = $i.extend({
+}), _t = Yi.extend({
   implicit: [
     Ki,
     Ji
@@ -640,7 +640,7 @@ var st = {
     i.tagMap[r] = s;
   }
 };
-function $(e, i, t, n) {
+function Y(e, i, t, n) {
   var r, s, o, a;
   if (i < t) {
     if (a = e.input.slice(i, t), n)
@@ -726,9 +726,9 @@ function Sr(e, i, t) {
           break;
         }
     }
-    a && ($(e, s, o, !1), Qe(e, e.line - l), s = o = e.position, a = !1), re(d) || (o = e.position + 1), d = e.input.charCodeAt(++e.position);
+    a && (Y(e, s, o, !1), Qe(e, e.line - l), s = o = e.position, a = !1), re(d) || (o = e.position + 1), d = e.input.charCodeAt(++e.position);
   }
-  return $(e, s, o, !1), e.result ? !0 : (e.kind = p, e.result = f, !1);
+  return Y(e, s, o, !1), e.result ? !0 : (e.kind = p, e.result = f, !1);
 }
 function Ar(e, i) {
   var t, n, r;
@@ -736,11 +736,11 @@ function Ar(e, i) {
     return !1;
   for (e.kind = "scalar", e.result = "", e.position++, n = r = e.position; (t = e.input.charCodeAt(e.position)) !== 0; )
     if (t === 39)
-      if ($(e, n, e.position, !0), t = e.input.charCodeAt(++e.position), t === 39)
+      if (Y(e, n, e.position, !0), t = e.input.charCodeAt(++e.position), t === 39)
         n = e.position, e.position++, r = e.position;
       else
         return !0;
-    else U(t) ? ($(e, n, r, !0), Qe(e, y(e, !1, i)), n = r = e.position) : e.position === e.lineStart && De(e) ? m(e, "unexpected end of the document within a single quoted scalar") : (e.position++, r = e.position);
+    else U(t) ? (Y(e, n, r, !0), Qe(e, y(e, !1, i)), n = r = e.position) : e.position === e.lineStart && De(e) ? m(e, "unexpected end of the document within a single quoted scalar") : (e.position++, r = e.position);
   m(e, "unexpected end of the stream within a single quoted scalar");
 }
 function kr(e, i) {
@@ -749,9 +749,9 @@ function kr(e, i) {
     return !1;
   for (e.kind = "scalar", e.result = "", e.position++, t = n = e.position; (a = e.input.charCodeAt(e.position)) !== 0; ) {
     if (a === 34)
-      return $(e, t, e.position, !0), e.position++, !0;
+      return Y(e, t, e.position, !0), e.position++, !0;
     if (a === 92) {
-      if ($(e, t, e.position, !0), a = e.input.charCodeAt(++e.position), U(a))
+      if (Y(e, t, e.position, !0), a = e.input.charCodeAt(++e.position), U(a))
         y(e, !1, i);
       else if (a < 256 && Lt[a])
         e.result += Ot[a], e.position++;
@@ -762,7 +762,7 @@ function kr(e, i) {
       } else
         m(e, "unknown escape sequence");
       t = n = e.position;
-    } else U(a) ? ($(e, t, n, !0), Qe(e, y(e, !1, i)), t = n = e.position) : e.position === e.lineStart && De(e) ? m(e, "unexpected end of the document within a double quoted scalar") : (e.position++, n = e.position);
+    } else U(a) ? (Y(e, t, n, !0), Qe(e, y(e, !1, i)), t = n = e.position) : e.position === e.lineStart && De(e) ? m(e, "unexpected end of the document within a double quoted scalar") : (e.position++, n = e.position);
   }
   m(e, "unexpected end of the stream within a double quoted scalar");
 }
@@ -824,7 +824,7 @@ function Lr(e, i) {
 `, l) : e.result += _.repeat(`
 `, s ? 1 + l : l), s = !0, o = !0, l = 0, t = e.position; !U(p) && p !== 0; )
       p = e.input.charCodeAt(++e.position);
-    $(e, t, e.position, !1);
+    Y(e, t, e.position, !1);
   }
   return !0;
 }
@@ -993,7 +993,7 @@ function Pr(e, i) {
 var Mr = Ir, Ur = Pr, Dr = {
   loadAll: Mr,
   load: Ur
-}, Nt = Object.prototype.toString, Ft = Object.prototype.hasOwnProperty, Xe = 65279, Hr = 9, be = 10, Br = 13, Vr = 32, jr = 33, Yr = 34, $e = 35, $r = 37, zr = 38, Wr = 39, Gr = 42, It = 44, Kr = 45, Ie = 58, qr = 61, Jr = 62, Qr = 63, Xr = 64, Pt = 91, Mt = 93, Zr = 96, Ut = 123, en = 124, Dt = 125, A = {};
+}, Nt = Object.prototype.toString, Ft = Object.prototype.hasOwnProperty, Xe = 65279, Hr = 9, be = 10, Br = 13, Vr = 32, jr = 33, $r = 34, Ye = 35, Yr = 37, zr = 38, Wr = 39, Gr = 42, It = 44, Kr = 45, Ie = 58, qr = 61, Jr = 62, Qr = 63, Xr = 64, Pt = 91, Mt = 93, Zr = 96, Ut = 123, en = 124, Dt = 125, A = {};
 A[0] = "\\0";
 A[7] = "\\a";
 A[8] = "\\b";
@@ -1084,11 +1084,11 @@ function pt(e, i, t) {
     (t ? (
       // c = flow-in
       n
-    ) : n && e !== It && e !== Pt && e !== Mt && e !== Ut && e !== Dt) && e !== $e && !(i === Ie && !r) || ct(i) && !Pe(i) && e === $e || i === Ie && r
+    ) : n && e !== It && e !== Pt && e !== Mt && e !== Ut && e !== Dt) && e !== Ye && !(i === Ie && !r) || ct(i) && !Pe(i) && e === Ye || i === Ie && r
   );
 }
 function un(e) {
-  return xe(e) && e !== Xe && !Pe(e) && e !== Kr && e !== Qr && e !== Ie && e !== It && e !== Pt && e !== Mt && e !== Ut && e !== Dt && e !== $e && e !== zr && e !== Gr && e !== jr && e !== en && e !== qr && e !== Jr && e !== Wr && e !== Yr && e !== $r && e !== Xr && e !== Zr;
+  return xe(e) && e !== Xe && !Pe(e) && e !== Kr && e !== Qr && e !== Ie && e !== It && e !== Pt && e !== Mt && e !== Ut && e !== Dt && e !== Ye && e !== zr && e !== Gr && e !== jr && e !== en && e !== qr && e !== Jr && e !== Wr && e !== $r && e !== Yr && e !== Xr && e !== Zr;
 }
 function cn(e) {
   return !Pe(e) && e !== Ie;
@@ -1298,7 +1298,7 @@ function xn(e, i) {
 }
 var Cn = xn, wn = {
   dump: Cn
-}, Yt = Dr.load, yn = wn.dump;
+}, $t = Dr.load, yn = wn.dump;
 const Oe = {
   BACKEND: "https://url.v1.mk",
   LOCK_BACKEND: !1,
@@ -1405,7 +1405,7 @@ class Sn {
     this.existVpsMap.set(r, Math.max(a, o + 1));
   }
   getParser(i) {
-    return i.startsWith("vless://") ? new Gt(i) : i.startsWith("vmess://") ? new Kt(i) : i.startsWith("trojan://") ? new Wt(i) : i.startsWith("ss://") ? new zt(i) : i.startsWith("hysteria2://") || i.startsWith("hysteria://") || i.startsWith("hy2://") ? new $t(i) : null;
+    return i.startsWith("vless://") ? new Gt(i) : i.startsWith("vmess://") ? new Kt(i) : i.startsWith("trojan://") ? new Wt(i) : i.startsWith("ss://") ? new zt(i) : i.startsWith("hysteria2://") || i.startsWith("hysteria://") || i.startsWith("hy2://") ? new Yt(i) : null;
   }
 }
 class An extends Sn {
@@ -1514,7 +1514,7 @@ const T = class T {
 W = new WeakMap(), G = new WeakMap(), x(T, W, "^LINK_TO^"), x(T, G, /* @__PURE__ */ new Map());
 let E = T;
 var K, _e, B, N, q, le;
-class $t extends Le {
+class Yt extends Le {
   constructor(t) {
     super();
     /** * @description 原始链接 */
@@ -1779,7 +1779,7 @@ class Wt extends Le {
   }
 }
 X = new WeakMap(), Ae = new WeakMap(), j = new WeakMap(), I = new WeakMap(), Z = new WeakMap(), ce = new WeakMap();
-var ee, ke, Y, P, te, pe;
+var ee, ke, $, P, te, pe;
 class Gt extends Le {
   constructor(t) {
     super();
@@ -1788,7 +1788,7 @@ class Gt extends Le {
     /** * @description 混淆链接 */
     x(this, ke, "");
     /** * @description vps原始配置 */
-    x(this, Y, {});
+    x(this, $, {});
     /** * @description 混淆配置 */
     x(this, P, {});
     /** * @description 原始备注 */
@@ -1802,14 +1802,14 @@ class Gt extends Le {
    * @param {string} v
    */
   setOriginConfig(t) {
-    g(this, ee, t), g(this, Y, new URL(t)), g(this, te, c(this, Y).hash ?? "");
+    g(this, ee, t), g(this, $, new URL(t)), g(this, te, c(this, $).hash ?? "");
   }
   /**
    * @description 更新原始配置
    * @param {string} ps
    */
   updateOriginConfig(t) {
-    c(this, Y).hash = t, g(this, te, t), g(this, ee, c(this, Y).href), this.setConfuseConfig(c(this, ee));
+    c(this, $).hash = t, g(this, te, t), g(this, ee, c(this, $).href), this.setConfuseConfig(c(this, ee));
   }
   /**
    * @description 设置混淆配置
@@ -1844,7 +1844,7 @@ class Gt extends Le {
    * @description 原始配置
    */
   get originConfig() {
-    return c(this, Y);
+    return c(this, $);
   }
   /**
    * @description 混淆备注
@@ -1867,7 +1867,7 @@ class Gt extends Le {
     return c(this, P);
   }
 }
-ee = new WeakMap(), ke = new WeakMap(), Y = new WeakMap(), P = new WeakMap(), te = new WeakMap(), pe = new WeakMap();
+ee = new WeakMap(), ke = new WeakMap(), $ = new WeakMap(), P = new WeakMap(), te = new WeakMap(), pe = new WeakMap();
 var he, Ee, D, M, ie, de, Ue, qt;
 class Kt extends Le {
   constructor(t) {
@@ -1981,7 +1981,7 @@ class kn extends An {
       const r = this.updateVpsPs(n);
       if (r) {
         let s = null;
-        r.startsWith("vless://") ? s = new Gt(r) : r.startsWith("vmess://") ? s = new Kt(r) : r.startsWith("trojan://") ? s = new Wt(r) : r.startsWith("ss://") ? s = new zt(r) : this.isHysteria2(r) && (s = new $t(r)), s && this.setStore(r, s);
+        r.startsWith("vless://") ? s = new Gt(r) : r.startsWith("vmess://") ? s = new Kt(r) : r.startsWith("trojan://") ? s = new Wt(r) : r.startsWith("ss://") ? s = new zt(r) : this.isHysteria2(r) && (s = new Yt(r)), s && this.setStore(r, s);
       }
       if (n.startsWith("https://") || n.startsWith("http://")) {
         const s = await Ze(n, { retries: 3 }).then((a) => a.data.text());
@@ -2002,7 +2002,7 @@ class kn extends An {
       return Ke(t), "base64";
     } catch {
       try {
-        return Yt(t), "yaml";
+        return $t(t), "yaml";
       } catch {
         try {
           return JSON.parse(t), "json";
@@ -2032,7 +2032,7 @@ let En = class {
     }
   }
   setClashConfig(i) {
-    const t = i.map((n) => Yt(n));
+    const t = i.map((n) => $t(n));
     return this.mergeClashConfig(t);
   }
   /**
@@ -3849,7 +3849,7 @@ function jn() {
     { label: "启用TFO", value: "tfo" }
   ];
 }
-function Yn(e, i) {
+function $n(e, i) {
   var r;
   const { origin: t } = new URL(e.url);
   return (((r = i.BACKEND) == null ? void 0 : r.split(`
@@ -3868,7 +3868,7 @@ function Yn(e, i) {
     ]
   );
 }
-function $n(e) {
+function Yn(e) {
   var t;
   return (((t = e.REMOTE_CONFIG) == null ? void 0 : t.split(`
 `).filter(Boolean)) ?? []).reduce(
@@ -4162,7 +4162,7 @@ function qn() {
     `;
 }
 function Jn(e, i) {
-  const t = $n(i), n = Yn(e, i), r = zn(i), s = Wn(), o = jn(), a = `  
+  const t = Yn(i), n = $n(e, i), r = zn(i), s = Wn(), o = jn(), a = `  
     <!DOCTYPE html>
         <html lang="en" theme="dark">
             <head>
@@ -4357,8 +4357,8 @@ function Jn(e, i) {
 
                     class Sub {
                         #model = {
-                            target: 'clash',
-                            config: 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online.ini',
+                            target: '${s[0].value}',
+                            config: '${t[0].value}',
                             backend: '${n[0].value}',
                             advanced: ['emoji', 'new_name'],
                             shortServe: '',
