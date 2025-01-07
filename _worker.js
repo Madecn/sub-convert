@@ -4164,6 +4164,7 @@ function qn() {
     `;
 }
 function Jn(e, i) {
+  var l;
   const t = Yn(i), n = $n(e, i), r = zn(i), s = Wn(), o = jn(), a = `  
     <!DOCTYPE html>
         <html lang="en" theme="dark">
@@ -4363,7 +4364,7 @@ function Jn(e, i) {
                             config: '${t[0].value}',
                             backend: '${n[0].value}',
                             advanced: ['emoji', 'new_name'],
-                            shortServe: '',
+                            shortServe: '${((l = r[0]) == null ? void 0 : l.value) ?? ""}',
 
                             subUrl: '',
                             shortUrl: ''
