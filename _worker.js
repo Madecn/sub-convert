@@ -2176,6 +2176,8 @@ class Rn {
   }
   restoreProxies(i, t) {
     try {
+      if (!i)
+        return [];
       const n = [];
       for (const r of i) {
         const [s, o] = E.getPs(r.name);
