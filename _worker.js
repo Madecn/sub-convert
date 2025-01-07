@@ -4256,11 +4256,11 @@ function Jn(e, i) {
                             </sub-form-item>
 
                             <sub-form-item label="远程配置">
-                                <sub-select key="config"></sub-select>
+                                <sub-select key="config" filterable></sub-select>
                             </sub-form-item>
 
                             <sub-form-item label="后端地址">
-                                <sub-select key="backend"></sub-select>
+                                <sub-select key="backend" filterable></sub-select>
                             </sub-form-item>
 
                             <sub-form-item label="高级选项">
@@ -4268,7 +4268,7 @@ function Jn(e, i) {
                             </sub-form-item>
 
                             <sub-form-item label="短链地址">
-                                <sub-select key="shortServe"></sub-select>
+                                <sub-select key="shortServe" filterable></sub-select>
                             </sub-form-item>
 
                             <sub-form-item label="定制订阅">
