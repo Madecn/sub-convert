@@ -4961,7 +4961,7 @@ class Qn extends Jn {
     return t.startsWith("hysteria2://") || t.startsWith("hysteria://") || t.startsWith("hy2://");
   }
   hasProtocol(...t) {
-    return t.some((n) => this.includeProtocol.includes(n));
+    return this.includeProtocol.length === 0 || t.some((n) => this.includeProtocol.includes(n));
   }
   get urls() {
     return Array.from(this.urlSet);
