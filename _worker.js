@@ -4735,7 +4735,13 @@ class Jt extends Oe {
    * @param {string} v
    */
   setOriginConfig(t) {
-    b(this, te, t), b(this, z, new URL(t)), b(this, re, u(this, z).hash ?? "");
+    b(this, te, t); // 存储原始链接
+    const url = new URL(t);
+    b(this, z, url); // 存储解析后的 URL 对象
+    b(this, re, url.hash ?? ""); // 存储备注
+
+    // 从查询参数中提取 servername 或 host
+    this.servername = url.searchParams.get("servername") || url.searchParams.get("host") || url.hostname;
   }
   /**
    * @description 更新原始配置
@@ -4756,8 +4762,36 @@ class Jt extends Oe {
     return t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(((i = this.originConfig) == null ? void 0 : i.port) ?? 0), t.uuid = this.originConfig.username ?? "", t.alpn = t.alpn ? (o = t.alpn) == null ? void 0 : o.map((s) => decodeURIComponent(s)) : t.alpn, t;
   }
   restoreSingbox(t, n) {
-    var i, o;
-    return t.tag = n, t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.uuid = this.originConfig.username ?? "", (i = t.tls) != null && i.server_name && (t.tls.server_name = this.originConfig.hostname ?? ""), (o = t.tls) != null && o.alpn && (t.tls.alpn = t.tls.alpn.map((s) => decodeURIComponent(s))), t;
+    var o;
+    t.tls = t.tls || {}; // 确保 tls 对象存在
+
+    t.tag = n;
+    t.server = this.originConfig.hostname ?? ""; // server 使用 IP 或域名
+    t.server_port = Number(this.originConfig.port ?? 0);
+    t.uuid = this.originConfig.username ?? "";
+    
+    // 使用 this.servername 设置 tls.server_name
+    t.tls.server_name = this.servername;
+    
+    // 处理 alpn（如果存在）
+    (o = t.tls) != null && o.alpn && (t.tls.alpn = t.tls.alpn.map((s) => decodeURIComponent(s)));
+    
+    // 可选：添加 insecure（根据你的前述需求）
+    t.tls.insecure = true;
+
+    // 支持 WebSocket（根据你的示例）
+    const type = this.originConfig.searchParams.get("type");
+    if (type === "ws") {
+        t.transport = {
+            type: "ws",
+            path: this.originConfig.searchParams.get("path") || "/",
+            headers: {
+                Host: this.servername
+            }
+        };
+    }
+
+    return t;
   }
   /**
    * @description 原始备注
