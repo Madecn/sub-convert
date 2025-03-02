@@ -4496,15 +4496,22 @@ class Wt extends Oe {
     t.server = this.originConfig.hostname ?? ""; // 设置服务器地址
     t.server_port = Number(this.originConfig.port ?? 0); // 设置端口
     t.password = ((i = this.originConfig) == null ? void 0 : i.username) ?? ""; // 设置密码
-
+    // 从 URL 查询参数中提取 SNI
+    const sni = this.originConfig.searchParams.get("sni") || 
+                              url.searchParams.get("servername") || 
+                              url.searchParams.get("host") || this.originConfig.hostname;
     // 添加 TLS 配置，确保 insecure 为 true
     t.tls = {
       enabled: true, // 启用 TLS
       insecure: true, // 允许不安全的连接（跳过证书验证）
-      server_name: this.originConfig.hostname ?? "" // 可选：设置 server_name 为原始主机名
+      server_name: this.isIP(sni) ? "" : sni  // 如果是 IP 地址，则留空
     };
-
     return t;
+  }
+  // 添加辅助方法判断是否为 IP 地址
+  isIP(str) {
+    const ipRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+    return ipRegex.test(str);
   }
   /**
    * @description 原始备注
@@ -4741,34 +4748,113 @@ class Jt extends Oe {
     x(this, re, "");
     /** * @description 混淆备注 */
     x(this, de, "");
-    b(this, de, crypto.randomUUID()), this.setOriginConfig(t), this.setConfuseConfig(t);
+    b(this, de, crypto.randomUUID());
+    
+    // 支持多种输入格式
+    this.setOriginConfig(t);
+    this.setConfuseConfig(this.originLink);
   }
   /**
-   * @description 设置原始配置
-   * @param {string} v
+   * @description 设置原始配置，支持 URL 或对象输入
+   * @param {string | object} input
    */
-  setOriginConfig(t) {
-    b(this, te, t); // 存储原始链接
-    const url = new URL(t);
-    b(this, z, url); // 存储解析后的 URL 对象
-    b(this, re, url.hash ?? ""); // 存储备注
+  setOriginConfig(input) {
+    let decodedInput = input;
 
-    // 从查询参数中提取 servername 或 host
-    this.servername = url.searchParams.get("servername") || url.searchParams.get("host") || url.hostname;
+    // 如果输入是字符串，尝试检测并解码 Base64
+    if (typeof input === "string") {
+      if (!input.startsWith("vless://") && this.isBase64(input)) {
+        decodedInput = this.decodeBase64(input);
+        if (!decodedInput.startsWith("vless://")) {
+          throw new Error("Base64 decoded content is not a valid VLESS URL");
+        }
+      }
+      
+      // 处理 VLESS URL
+      if (decodedInput.startsWith("vless://")) {
+        b(this, te, decodedInput);
+        const url = new URL(decodedInput);
+        b(this, z, url);
+        b(this, re, url.hash ?? "");
+        // 修改此处，优先使用 sni
+        this.servername = url.searchParams.get("sni") || 
+                          url.searchParams.get("servername") || 
+                          url.searchParams.get("host") || 
+                          url.hostname;
+      } else {
+        throw new Error("Invalid VLESS URL format");
+      }
+    } 
+    // 处理 Clash 格式的对象
+    else if (typeof input === "object" && input.type === "vless") {
+      const config = {
+        hostname: input.server || "",
+        port: input.port || "443",
+        username: input.uuid || "",
+        hash: input.name || ""
+      };
+      const url = new URL(`vless://${config.username}@${config.hostname}:${config.port}`);
+      if (input.servername) url.searchParams.set("servername", input.servername);
+      if (input.host) url.searchParams.set("host", input.host);
+      url.hash = config.hash;
+
+      b(this, te, url.href);
+      b(this, z, url);
+      b(this, re, url.hash ?? "");
+      this.servername = input.servername || input.host || input.server;
+    } else {
+      throw new Error("Unsupported VLESS input format");
+    }
+  }
+  /**
+   * @description 判断是否为 Base64 编码
+   * @param {string} str
+   * @returns {boolean}
+   */
+  isBase64(str) {
+    try {
+      // Base64 字符串通常是 4 的倍数长度，且只包含合法字符
+      const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+      return base64Regex.test(str) && atob(str) && true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * @description 解码 Base64 字符串
+   * @param {string} str
+   * @returns {string}
+   */
+  decodeBase64(str) {
+    try {
+      return atob(str);
+    } catch (e) {
+      throw new Error(`Base64 decode failed: ${e.message}`);
+    }
   }
   /**
    * @description 更新原始配置
    * @param {string} ps
    */
   updateOriginConfig(t) {
-    u(this, z).hash = t, b(this, re, t), b(this, te, u(this, z).href), this.setConfuseConfig(u(this, te));
+    u(this, z).hash = t;
+    b(this, re, t);
+    b(this, te, u(this, z).href);
+    this.setConfuseConfig(u(this, te));
   }
   /**
    * @description 设置混淆配置
    * @param {string} v
    */
   setConfuseConfig(t) {
-    b(this, M, new URL(t)), u(this, M).username = this.getUsername(), u(this, M).host = this.getHost(), u(this, M).hostname = this.getHostName(), u(this, M).port = this.getPort(), u(this, M).hash = L.setPs(u(this, re), u(this, de)), b(this, ke, u(this, M).href);
+    b(this, M, new URL(t));
+    u(this, M).username = this.getUsername();
+    u(this, M).host = this.getHost();
+    u(this, M).hostname = this.getHostName();
+    u(this, M).port = this.getPort();
+    u(this, M).hash = L.setPs(u(this, re), u(this, de));
+    b(this, ke, u(this, M).href);
   }
   restoreClash(t, n) {
     var i, o;
@@ -4780,30 +4866,38 @@ class Jt extends Oe {
     t.server_port = Number(this.originConfig.port ?? 0);
     t.uuid = this.originConfig.username ?? "";
 
-    // TLS 配置
     t.tls = t.tls || {};
-    t.tls.enabled = true; // 明确启用 TLS
-    t.tls.server_name = this.servername;
+    t.tls.enabled = true;
+    t.tls.server_name = this.servername && !this.isIP(this.servername) ? this.servername : "";
 
-    // 处理 ALPN
     if (t.tls.alpn) {
       t.tls.alpn = t.tls.alpn.map((s) => decodeURIComponent(s));
     }
 
-    // WebSocket 支持
     const type = this.originConfig.searchParams.get("type");
     if (type === "ws") {
       t.transport = {
         type: "ws",
         path: this.originConfig.searchParams.get("path") || "/",
         headers: {
-          Host: this.servername
+          Host: this.servername && !this.isIP(this.servername) ? this.servername : this.originConfig.hostname
         }
       };
     }
-
     return t;
   }
+  // 添加辅助方法判断是否为 IP 地址
+  isIP(str) {
+    const ipRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+    return ipRegex.test(str);
+  }
+
+  get originPs() { return u(this, re); }
+  get originLink() { return u(this, te); }
+  get originConfig() { return u(this, z); }
+  get confusePs() { return u(this, de); }
+  get confuseLink() { return u(this, ke); }
+  get confuseConfig() { return u(this, M); }
   /**
    * @description 原始备注
    * @example '#originPs'
@@ -4957,16 +5051,65 @@ class Kn extends Gn {
   }
   async parse(t = this.vps) {
     for await (const n of t) {
-      const i = this.updateVpsPs(n);
+      let decodedLine = n;
+      
+      // 如果是 Base64 编码，解码为明文
+      if (this.isBase64(n)) {
+        decodedLine = this.decodeBase64(n);
+      }
+
+      const i = this.updateVpsPs(decodedLine);
       if (i) {
         let o = null;
-        i.startsWith("vless://") && this.hasProtocol("vless") ? o = new Jt(i) : i.startsWith("vmess://") && this.hasProtocol("vmess") ? o = new Qt(i) : i.startsWith("trojan://") && this.hasProtocol("trojan") ? o = new Kt(i) : i.startsWith("ss://") && this.hasProtocol("shadowsocks", "shadowsocksr") ? o = new Gt(i) : this.isHysteria2(i) && this.hasProtocol("hysteria", "hysteria2", "hy2") && (o = new Wt(i)), o && this.setStore(i, o);
+        if (i.startsWith("vless://") && this.hasProtocol("vless")) {
+          o = new Jt(i);
+        } else if (i.startsWith("vmess://") && this.hasProtocol("vmess")) {
+          o = new Qt(i);
+        } else if (i.startsWith("trojan://") && this.hasProtocol("trojan")) {
+          o = new Kt(i);
+        } else if (i.startsWith("ss://") && this.hasProtocol("shadowsocks", "shadowsocksr")) {
+          o = new Gt(i);
+        } else if (this.isHysteria2(i) && this.hasProtocol("hysteria", "hysteria2", "hy2")) {
+          o = new Wt(i);
+        }
+        if (o) this.setStore(i, o);
       }
+
       if (n.startsWith("https://") || n.startsWith("http://")) {
-        const o = await Ze(n, { retries: 3 }).then((l) => l.data.text()), { subType: s, content: a } = this.getSubType(o);
-        s === "base64" && o && (this.updateExist(Array.from(this.originUrls)), await this.parse(a.split(`
-`).filter(Boolean)));
+        const o = await Ze(n, { retries: 3 }).then((l) => l.data.text());
+        const { subType: s, content: a } = this.getSubType(o);
+        if (s === "base64" && a) {
+          this.updateExist(Array.from(this.originUrls));
+          await this.parse(a.split(`\n`).filter(Boolean));
+        }
       }
+    }
+  }
+
+  /**
+   * @description 判断是否为 Base64 编码
+   * @param {string} str
+   * @returns {boolean}
+   */
+  isBase64(str) {
+    try {
+      const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+      return base64Regex.test(str) && atob(str) && true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * @description 解码 Base64 字符串
+   * @param {string} str
+   * @returns {string}
+   */
+  decodeBase64(str) {
+    try {
+      return atob(str);
+    } catch (e) {
+      throw new Error(`Base64 decode failed: ${e.message}`);
     }
   }
   setStore(t, n) {
