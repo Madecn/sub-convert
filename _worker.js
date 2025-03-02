@@ -5134,7 +5134,9 @@ class Zn {
         const [o, s] = L.getPs(i.name);
         if (t.has(s)) {
           const a = t.get(s);
-          a == null || a.restoreClash(i, o), n.push(i);
+          a == null || a.restoreClash(i, o);
+          i["skip-cert-verify"] = true;  // 在这里统一添加
+          n.push(i);
         }
       }
       return n;
