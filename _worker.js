@@ -4491,7 +4491,20 @@ class Wt extends Oe {
   }
   restoreSingbox(t, n) {
     var i;
-    return t.password = ((i = this.originConfig) == null ? void 0 : i.username) ?? "", t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.tag = n, t;
+    t.type = "hysteria2"; // 明确指定类型为 hysteria2
+    t.tag = n; // 设置 tag 为原始名称
+    t.server = this.originConfig.hostname ?? ""; // 设置服务器地址
+    t.server_port = Number(this.originConfig.port ?? 0); // 设置端口
+    t.password = ((i = this.originConfig) == null ? void 0 : i.username) ?? ""; // 设置密码
+
+    // 添加 TLS 配置，确保 insecure 为 true
+    t.tls = {
+      enabled: true, // 启用 TLS
+      insecure: true, // 允许不安全的连接（跳过证书验证）
+      server_name: this.originConfig.hostname ?? "" // 可选：设置 server_name 为原始主机名
+    };
+
+    return t;
   }
   /**
    * @description 原始备注
@@ -4762,33 +4775,31 @@ class Jt extends Oe {
     return t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(((i = this.originConfig) == null ? void 0 : i.port) ?? 0), t.uuid = this.originConfig.username ?? "", t.alpn = t.alpn ? (o = t.alpn) == null ? void 0 : o.map((s) => decodeURIComponent(s)) : t.alpn, t;
   }
   restoreSingbox(t, n) {
-    var o;
-    t.tls = t.tls || {}; // 确保 tls 对象存在
-
     t.tag = n;
-    t.server = this.originConfig.hostname ?? ""; // server 使用 IP 或域名
+    t.server = this.originConfig.hostname ?? "";
     t.server_port = Number(this.originConfig.port ?? 0);
     t.uuid = this.originConfig.username ?? "";
-    
-    // 使用 this.servername 设置 tls.server_name
-    t.tls.server_name = this.servername;
-    
-    // 处理 alpn（如果存在）
-    (o = t.tls) != null && o.alpn && (t.tls.alpn = t.tls.alpn.map((s) => decodeURIComponent(s)));
-    
-    // 可选：添加 insecure（根据你的前述需求）
-    t.tls.insecure = true;
 
-    // 支持 WebSocket（根据你的示例）
+    // TLS 配置
+    t.tls = t.tls || {};
+    t.tls.enabled = true; // 明确启用 TLS
+    t.tls.server_name = this.servername;
+
+    // 处理 ALPN
+    if (t.tls.alpn) {
+      t.tls.alpn = t.tls.alpn.map((s) => decodeURIComponent(s));
+    }
+
+    // WebSocket 支持
     const type = this.originConfig.searchParams.get("type");
     if (type === "ws") {
-        t.transport = {
-            type: "ws",
-            path: this.originConfig.searchParams.get("path") || "/",
-            headers: {
-                Host: this.servername
-            }
-        };
+      t.transport = {
+        type: "ws",
+        path: this.originConfig.searchParams.get("path") || "/",
+        headers: {
+          Host: this.servername
+        }
+      };
     }
 
     return t;
@@ -5061,24 +5072,21 @@ let Jn = class {
   }
 }, Qn = class {
   async getConfig(r) {
-    try {
-      const t = await Promise.all(
-        r.map((n) => Ze(n, { retries: 3 }).then((i) => i.data.json()))
-      );
-      return this.mergeConfig(t);
-    } catch (t) {
-      throw new Error(`Failed to get singbox config: ${t.message || t}`);
-    }
+    const t = await Promise.all(
+      r.map((n) => Ze(n, { retries: 3 }).then((i) => i.data.json()))
+    );
+    return this.mergeConfig(t);
   }
+
   mergeConfig(r) {
-    var t, n;
     try {
-      if (r.length === 0)
-        return {};
-      const i = structuredClone(r[0]), o = [], s = /* @__PURE__ */ new Set(), a = /* @__PURE__ */ new Map();
-      for (const l of r)
-        if ((t = l.outbounds) != null && t.length) {
-          for (const c of l.outbounds)
+      if (r.length === 0) return {};
+      const i = structuredClone(r[0]);
+      const o = [], s = new Set(), a = new Map();
+
+      for (const l of r) {
+        if (l.outbounds?.length) {
+          for (const c of l.outbounds) {
             if (c.outbounds) {
               const d = `${c.type}:${c.tag}`;
               if (!a.has(d)) {
@@ -5086,31 +5094,55 @@ let Jn = class {
                 a.set(d, {
                   base: c,
                   baseOutbounds: p,
-                  linkOutbounds: /* @__PURE__ */ new Set()
+                  linkOutbounds: new Set()
                 });
               }
               c.outbounds.forEach((p) => {
-                var f;
-                L.isConfigType(p) && ((f = a.get(d)) == null || f.linkOutbounds.add(p));
+                if (L.isConfigType(p)) a.get(d)?.linkOutbounds.add(p);
               });
             }
+          }
         }
-      for (const l of r)
-        if ((n = l.outbounds) != null && n.length) {
-          for (const c of l.outbounds)
-            if (!c.outbounds)
-              if (L.isConfigType(c.tag))
-                o.push(c);
-              else {
-                const d = `${c.type}:${c.tag}`;
-                s.has(d) || (s.add(d), o.push(c));
-              }
-        }
-      for (const [l, c] of a) {
-        const d = { ...c.base }, p = /* @__PURE__ */ new Set([...c.baseOutbounds, ...c.linkOutbounds]);
-        d.outbounds = Array.from(p), o.push(d);
       }
-      return i.outbounds = o, i;
+
+      for (const l of r) {
+        if (l.outbounds?.length) {
+          for (const c of l.outbounds) {
+            if (!c.outbounds) {
+              const d = `${c.type}:${c.tag}`;
+              if (L.isConfigType(c.tag)) o.push(c);
+              else if (!s.has(d)) {
+                s.add(d);
+                o.push(c);
+              }
+            }
+          }
+        }
+      }
+
+      for (const [_, c] of a) {
+        const d = { ...c.base };
+        d.outbounds = Array.from(new Set([...c.baseOutbounds, ...c.linkOutbounds]));
+        o.push(d);
+      }
+
+      i.outbounds = o;
+      // 移除废弃字段
+      delete i.geoip;
+      delete i.geosite;
+
+      // 添加默认路由和出站
+      i.route = i.route || {
+        rules: [],
+        final: "direct"
+      };
+      i.outbounds.push(
+        { type: "direct", tag: "direct" },
+        { type: "block", tag: "block" },
+        { type: "dns", tag: "dns-out" }
+      );
+
+      return i;
     } catch (i) {
       throw new Error(`Failed to merge singbox config: ${i.message || i}`);
     }
@@ -5139,7 +5171,38 @@ class Xn {
     return await this.clashClient.getConfig(this.urls);
   }
   async getSingboxConfig() {
-    return await this.singboxClient.getConfig(this.urls);
+    const config = await this.singboxClient.getConfig(this.urls);
+    // 添加默认的现代出站配置，避免使用遗留特殊出站
+    config.outbounds = config.outbounds || [];
+    config.outbounds.push(
+      { type: "direct", tag: "direct" },
+      { type: "block", tag: "block" },
+      { type: "dns", tag: "dns-out" }
+    );
+
+    // 移除废弃的 geoip 和 geosite 字段
+    delete config.geoip;
+    delete config.geosite;
+
+    // 添加基本的路由配置
+    config.route = config.route || {};
+    config.route.rules = config.route.rules || [];
+    config.route.final = config.route.final || "direct"; // 默认直连
+
+    // 如果有 TUN 配置，更新字段
+    if (config.tun) {
+      config.tun = {
+        ...config.tun,
+        inet4_address: config.tun.address ? [config.tun.address] : ["172.19.0.1/30"],
+        inet6_address: config.tun.address6 ? [config.tun.address6] : ["fdfe:dcba:9876::1/126"],
+        auto_route: config.tun.auto_route ?? true,
+        strict_route: config.tun.strict_route ?? false
+      };
+      delete config.tun.address; // 移除旧字段
+      delete config.tun.address6;
+    }
+
+    return config;
   }
   get vpsStore() {
     var r;
@@ -5228,37 +5291,42 @@ class Zn {
 }
 class eo {
   constructor(r) {
-    A(this, "confuseConfig");
+    // A(this, "confuseConfig");
     this.confuseConfig = r;
   }
   getOriginConfig(r) {
-    try {
-      return this.confuseConfig.outbounds = this.restoreOutbounds(this.confuseConfig.outbounds, r), this.confuseConfig;
-    } catch (t) {
-      throw new Error(`Get origin config failed: ${t.message || t}, function trace: ${t.stack}`);
-    }
+    this.confuseConfig.outbounds = this.restoreOutbounds(this.confuseConfig.outbounds, r);
+    // 移除废弃字段
+    delete this.confuseConfig.geoip;
+    delete this.confuseConfig.geosite;
+    return this.confuseConfig;
   }
   restoreOutbounds(r = [], t) {
     try {
       const n = [];
       for (const i of r) {
         if (this.isConfuseVps(i.tag)) {
-          const [o, s] = L.getPs(i.tag), a = t.get(s);
-          a == null || a.restoreSingbox(i, o);
+          const [o, s] = L.getPs(i.tag);
+          const a = t.get(s);
+          a == null || a.restoreSingbox(i, o); // 调用 Wt 的 restoreSingbox
         }
-        Reflect.has(i, "outbounds") && (i.outbounds = this.updateOutbouns(i.outbounds)), n.push(i);
+        if (Reflect.has(i, "outbounds")) {
+          i.outbounds = this.updateOutbounds(i.outbounds);
+        }
+        n.push(i);
       }
       return n;
     } catch (n) {
       throw new Error(`Restore outbounds failed: ${n.message || n}, function trace: ${n.stack}`);
     }
   }
-  updateOutbouns(r = []) {
+
+  updateOutbounds(r = []) {
     try {
       return r.map((t) => {
         if (this.isConfuseVps(t)) {
           const [n] = L.getPs(t);
-          return n;
+          return n; // 返回原始名称
         }
         return t;
       });
@@ -5266,6 +5334,7 @@ class eo {
       throw new Error(`Update outbounds failed: ${t.message || t}, function trace: ${t.stack}`);
     }
   }
+
   isConfuseVps(r) {
     return L.isConfigType(r);
   }
