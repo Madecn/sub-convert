@@ -5151,41 +5151,78 @@ class Zn {
     A(this, "confuseConfig");
     this.confuseConfig = r;
   }
-  getOriginConfig(r) {
-    var t, n;
-    try {
-      return this.confuseConfig.proxies = this.restoreProxies(this.confuseConfig.proxies, r), this.confuseConfig["proxy-groups"] = (n = (t = this.confuseConfig) == null ? void 0 : t["proxy-groups"]) == null ? void 0 : n.map((i) => (i.proxies && (i.proxies = this.updateProxiesGroups(i.proxies)), i)), this.confuseConfig;
-    } catch (i) {
-      throw new Error(`Get origin config failed: ${i.message || i}, function trace: ${i.stack}`);
-    }
-  }
+
   restoreProxies(r, t) {
     try {
-      if (!r)
-        return [];
+      if (!r) return [];
       const n = [];
+      const nameCount = new Map();
+      const nameMap = new Map();
+
       for (const i of r) {
-        const [o, s] = L.getPs(i.name);
+        const [o, s] = L.getPs(i.name); // o 是原始名称，s 是混淆部分
         if (t.has(s)) {
           const a = t.get(s);
           a == null || a.restoreClash(i, o);
-          i["skip-cert-verify"] = true;  // 在这里统一添加
+          i["skip-cert-verify"] = true;
+
+          let finalName = o;
+          if (nameCount.has(o)) {
+            const count = nameCount.get(o) + 1;
+            finalName = `${o} (${count})`;
+            nameCount.set(o, count);
+          } else {
+            nameCount.set(o, 0);
+          }
+          i.name = finalName;
+          nameMap.set(o, finalName);
           n.push(i);
         }
       }
+      this.proxyNames = n.map(i => i.name); // 存储最终名称顺序
+      this.nameMap = nameMap;
       return n;
     } catch (n) {
       throw new Error(`Restore proxies failed: ${n.message || n}, function trace: ${n.stack}`);
     }
   }
+
   updateProxiesGroups(r) {
     try {
-      return r.map((t) => {
-        const [n] = L.getPs(t);
-        return n;
-      });
+      const groupNames = [];
+      let originalNameIndex = 0; // 跟踪原始名称的出现顺序
+      const originalNameCount = new Map(); // 记录每个原始名称的出现次数
+
+      for (const t of r) {
+        const [n] = L.getPs(t); // n 是原始名称
+        const count = originalNameCount.get(n) || 0;
+        originalNameCount.set(n, count + 1);
+
+        // 根据原始名称和出现次数生成对应的重命名名称
+        const mappedName = count === 0 ? n : this.nameMap.get(n) === n ? n : `${n} (${count})`;
+        groupNames.push(mappedName);
+
+        originalNameIndex++;
+      }
+      return groupNames;
     } catch (t) {
       throw new Error(`Update proxies groups failed: ${t.message || t}, function trace: ${t.stack}`);
+    }
+  }
+
+  getOriginConfig(r) {
+    var t, n;
+    try {
+      this.confuseConfig.proxies = this.restoreProxies(this.confuseConfig.proxies, r);
+      this.confuseConfig["proxy-groups"] = (n = (t = this.confuseConfig) == null ? void 0 : t["proxy-groups"]) == null ? void 0 : n.map((i) => {
+        if (i.proxies) {
+          i.proxies = this.updateProxiesGroups(i.proxies);
+        }
+        return i;
+      });
+      return this.confuseConfig;
+    } catch (i) {
+      throw new Error(`Get origin config failed: ${i.message || i}, function trace: ${i.stack}`);
     }
   }
 }
