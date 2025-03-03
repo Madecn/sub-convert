@@ -4491,7 +4491,31 @@ class Wt extends Oe {
   }
   restoreSingbox(t, n) {
     var i;
-    return t.password = ((i = this.originConfig) == null ? void 0 : i.username) ?? "", t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.tag = n, t;
+    t.type = "hysteria2"; // 明确指定类型为 hysteria2
+    t.tag = n; // 设置 tag 为原始名称
+    t.server = this.originConfig.hostname ?? ""; // 设置服务器地址
+    t.server_port = Number(this.originConfig.port ?? 0); // 设置端口
+    t.password = ((i = this.originConfig) == null ? void 0 : i.username) ?? ""; // 设置密码
+  
+    // 从 URL 查询参数中提取 SNI，修正为 this.originConfig
+    const sni = this.originConfig.searchParams.get("sni") || 
+                this.originConfig.searchParams.get("servername") || 
+                this.originConfig.searchParams.get("host") || 
+                this.originConfig.hostname;
+  
+    // 添加 TLS 配置，确保 insecure 为 true
+    t.tls = t.tls || {}; // 如果已有 tls 配置，则合并而不是覆盖
+    t.tls.enabled = true; // 启用 TLS
+    t.tls.insecure = true; // 允许不安全的连接（跳过证书验证）
+    t.tls.server_name = this.isIP(sni) ? "" : sni; // 如果是 IP 地址，则留空
+  
+    return t;
+  }
+  
+  // 添加辅助方法判断是否为 IP 地址
+  isIP(str) {
+    const ipRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+    return ipRegex.test(str);
   }
   /**
    * @description 原始备注
