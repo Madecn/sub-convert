@@ -5050,19 +5050,20 @@ class Kn extends Gn {
     this.vps = t, this.includeProtocol = i ? JSON.parse(i) : [];
   }
   async parse(t = this.vps) {
+    console.log("Starting parse with input:", t);
     for await (const n of t) {
       let decodedLine = n;
-      
-      // 如果是 Base64 编码，解码为明文
       if (this.isBase64(n)) {
         decodedLine = this.decodeBase64(n);
+        console.log("Base64 detected, decoded result:", decodedLine);
       }
-
       const i = this.updateVpsPs(decodedLine);
+      console.log("Processed line:", i);
       if (i) {
         let o = null;
         if (i.startsWith("vless://") && this.hasProtocol("vless")) {
           o = new Jt(i);
+          console.log("Parsed as VLESS:", o.originLink);
         } else if (i.startsWith("vmess://") && this.hasProtocol("vmess")) {
           o = new Qt(i);
         } else if (i.startsWith("trojan://") && this.hasProtocol("trojan")) {
@@ -5074,15 +5075,24 @@ class Kn extends Gn {
         }
         if (o) this.setStore(i, o);
       }
-
       if (n.startsWith("https://") || n.startsWith("http://")) {
-        const o = await Ze(n, { retries: 3 }).then((l) => l.data.text());
-        const { subType: s, content: a } = this.getSubType(o);
-        if (s === "base64" && a) {
-          this.updateExist(Array.from(this.originUrls));
-          await this.parse(a.split(`\n`).filter(Boolean));
+        try {
+          const o = await Ze(n, { retries: 3 }).then((l) => l.data.text());
+          console.log("Fetched subscription content:", o);
+          const { subType, content } = this.getSubType(o);
+          console.log("Sub type:", subType, "Content:", content);
+          if (subType === "base64" && content) {
+            this.updateExist(Array.from(this.originUrls));
+            await this.parse(content.split('\n').filter(Boolean));
+          }
+        } catch (e) {
+          console.error("Failed to fetch or parse HTTP subscription:", n, e.message);
+          // 继续处理其他输入，不中断流程
         }
       }
+    }
+    if (this.vpsStore.size === 0) {
+      console.warn("No valid VPS configurations parsed.");
     }
   }
 
@@ -5500,33 +5510,39 @@ class ro {
     this.db = r;
   }
   async toSub(r, t, n) {
+    console.log("toSub called with request:", r.url, "target:", n);
     try {
-      const i = new Xn(t);
-      await i.setSubUrls(r);
-      const o = new to(i);
-      if (["clash", "clashr"].includes(n)) {
-        const s = await o.getClashConfig();
-        return new Response(Yn(s, { indent: 2, lineWidth: 200 }), {
-          headers: new Headers({
-            "Content-Type": "text/yaml; charset=UTF-8",
-            "Cache-Control": "no-store"
-          })
-        });
-      }
-      if (n === "singbox") {
-        const s = await o.getSingboxConfig();
-        return new Response(JSON.stringify(s), {
-          headers: new Headers({
-            "Content-Type": "text/plain; charset=UTF-8",
-            "Cache-Control": "no-store"
-          })
-        });
-      }
-      return C.error("Unsupported client type, support list: clash, clashr");
+        const i = new Xn(t);
+        await i.setSubUrls(r);
+        console.log("Parsed URLs:", i.urls);
+        const o = new to(i);
+        if (["clash", "clashr"].includes(n)) {
+            const s = await o.getClashConfig();
+            console.log("Generated Clash config:", s);
+            return new Response(Yn(s, { indent: 2, lineWidth: 200 }), {
+                headers: new Headers({
+                    "Content-Type": "text/yaml; charset=UTF-8",
+                    "Cache-Control": "no-store"
+                })
+            });
+        }
+        // 其他逻辑
+        if (n === "singbox") {
+          const s = await o.getSingboxConfig();
+          return new Response(JSON.stringify(s), {
+            headers: new Headers({
+              "Content-Type": "text/plain; charset=UTF-8",
+              "Cache-Control": "no-store"
+            })
+          });
+        }
+        return C.error("Unsupported client type, support list: clash, clashr");
+      
     } catch (i) {
-      throw new Error(i.message || "Invalid request");
+        console.error("toSub error:", i.message, i.stack);
+        throw new Error(i.message || "Invalid request");
     }
-  }
+}
   async add(r, t) {
     if (!this.db)
       throw new Error("Database is not initialized");
