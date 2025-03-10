@@ -5313,6 +5313,7 @@ class Xn {
     A(this, "parser", null);
     A(this, "clashClient", new Jn());
     A(this, "singboxClient", new Qn());
+    A(this, "trafficInfo", null); // 新增属性存储流量信息
     this.chunkCount = Number(r.CHUNK_COUNT ?? Te.CHUNK_COUNT), this.backend = r.BACKEND ?? Te.BACKEND, this.parser = null;
   }
   async setSubUrls(r) {
@@ -5323,9 +5324,41 @@ class Xn {
       const l = new URL(`${this.backend}/sub`), { searchParams: c } = new URL(r.url);
       return c.set("url", a), l.search = c.toString(), l.toString();
     });
+    // 调用 Ze，带上 User-Agent
+    const subResponse = await Ze(n, {
+      retries: 3,
+      retryDelay: 1000, // 可选：自定义重试延迟
+      retryOnStatusCodes: [429, 503], // 可选：重试的状态码
+      headers: {
+        "User-Agent": "clash.meta", // 添加 Clash Meta 的 User-Agent
+      },
+    });
+    // 检查 subscription-userinfo
+    if (subResponse.headers["subscription-userinfo"]) {
+      this.trafficInfo = this.parseTrafficInfo(subResponse.headers["subscription-userinfo"]);
+      console.log("Parsed traffic info:", this.trafficInfo);
+    } else {
+      console.log("No subscription-userinfo found in response");
+      this.trafficInfo = null;
+    }
+  
+  }
+  
+  // 解析 subscription-userinfo 的辅助方法
+  parseTrafficInfo(userinfo) {
+    const info = {};
+    userinfo.split(";").forEach((pair) => {
+      const [key, value] = pair.split("=");
+      if (key && value) info[key.trim()] = parseInt(value.trim(), 10);
+    });
+    return info;
   }
   async getClashConfig() {
-    return await this.clashClient.getConfig(this.urls);
+    const config = await this.clashClient.getConfig(this.urls);
+    if (this.trafficInfo) {
+      config["traffic-info"] = this.trafficInfo; // 添加到顶层
+    }
+    return config;
   }
   async getSingboxConfig() {
     const config = await this.singboxClient.getConfig(this.urls);
@@ -5362,8 +5395,8 @@ class Xn {
     return config;
   }
   get vpsStore() {
-    var r;
-    return (r = this.parser) == null ? void 0 : r.vpsMap;
+    // var r;
+    return this.parser?.vpsMap;
   }
 }
 class Zn {
@@ -5522,11 +5555,15 @@ class ro {
         const o = new to(i);
         if (["clash", "clashr"].includes(n)) {
             const s = await o.getClashConfig();
-            console.log("Generated Clash config:", s);
+            // console.log("Generated Clash config:", s);
+            // 输出 YAML 格式，包含流量信息
             return new Response(Yn(s, { indent: 2, lineWidth: 200 }), {
                 headers: new Headers({
                     "Content-Type": "text/yaml; charset=UTF-8",
-                    "Cache-Control": "no-store"
+                    "Cache-Control": "no-store",
+                    "subscription-userinfo": i.trafficInfo
+              ? `upload=${i.trafficInfo.upload}; download=${i.trafficInfo.download}; total=${i.trafficInfo.total}; expire=${i.trafficInfo.expire}`
+              : "", // 在响应头中保留
                 })
             });
         }
@@ -5536,7 +5573,7 @@ class ro {
           return new Response(JSON.stringify(s), {
             headers: new Headers({
               "Content-Type": "text/plain; charset=UTF-8",
-              "Cache-Control": "no-store"
+              "Cache-Control": "no-store",
             })
           });
         }
