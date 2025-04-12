@@ -2999,7 +2999,7 @@ function be(e, r) {
 }
 be.prototype = Object.create(Error.prototype);
 be.prototype.constructor = be;
-be.prototype.toString = function(r) {
+be.prototype.toString = function (r) {
   return this.name + ": " + Et(this, r);
 };
 var T = be;
@@ -3017,7 +3017,7 @@ function je(e, r) {
 function Dr(e, r) {
   if (r = Object.create(r || null), !e.buffer) return null;
   r.maxLength || (r.maxLength = 79), typeof r.indent != "number" && (r.indent = 1), typeof r.linesBefore != "number" && (r.linesBefore = 3), typeof r.linesAfter != "number" && (r.linesAfter = 2);
-  for (var t = /\r?\n|\r|\0/g, i = [0], n = [], o, s = -1; o = t.exec(e.buffer); )
+  for (var t = /\r?\n|\r|\0/g, i = [0], n = [], o, s = -1; o = t.exec(e.buffer);)
     n.push(o.index), i.push(o.index + o[0].length), e.position <= o.index && s < 0 && (s = i.length - 2);
   s < 0 && (s = i.length - 1);
   var a = "", l, c, d = Math.min(e.line + r.linesAfter, n.length).toString().length, p = r.maxLength - (r.indent + d + 3);
@@ -3061,19 +3061,19 @@ var Vr = Dr, Hr = [
 ];
 function jr(e) {
   var r = {};
-  return e !== null && Object.keys(e).forEach(function(t) {
-    e[t].forEach(function(i) {
+  return e !== null && Object.keys(e).forEach(function (t) {
+    e[t].forEach(function (i) {
       r[String(i)] = t;
     });
   }), r;
 }
 function $r(e, r) {
-  if (r = r || {}, Object.keys(r).forEach(function(t) {
+  if (r = r || {}, Object.keys(r).forEach(function (t) {
     if (Hr.indexOf(t) === -1)
       throw new T('Unknown option "' + t + '" is met in definition of "' + e + '" YAML type.');
-  }), this.options = r, this.tag = e, this.kind = r.kind || null, this.resolve = r.resolve || function() {
+  }), this.options = r, this.tag = e, this.kind = r.kind || null, this.resolve = r.resolve || function () {
     return !0;
-  }, this.construct = r.construct || function(t) {
+  }, this.construct = r.construct || function (t) {
     return t;
   }, this.instanceOf = r.instanceOf || null, this.predicate = r.predicate || null, this.represent = r.represent || null, this.representName = r.representName || null, this.defaultStyle = r.defaultStyle || null, this.multi = r.multi || !1, this.styleAliases = jr(r.styleAliases || null), Br.indexOf(this.kind) === -1)
     throw new T('Unknown kind "' + this.kind + '" is specified for "' + e + '" YAML type.');
@@ -3081,9 +3081,9 @@ function $r(e, r) {
 var E = $r;
 function nt(e, r) {
   var t = [];
-  return e[r].forEach(function(i) {
+  return e[r].forEach(function (i) {
     var n = t.length;
-    t.forEach(function(o, s) {
+    t.forEach(function (o, s) {
       o.tag === i.tag && o.kind === i.kind && o.multi === i.multi && (n = s);
     }), t[n] = i;
   }), t;
@@ -3111,7 +3111,7 @@ function zr() {
 function ze(e) {
   return this.extend(e);
 }
-ze.prototype.extend = function(r) {
+ze.prototype.extend = function (r) {
   var t = [], i = [];
   if (r instanceof E)
     i.push(r);
@@ -3121,14 +3121,14 @@ ze.prototype.extend = function(r) {
     r.implicit && (t = t.concat(r.implicit)), r.explicit && (i = i.concat(r.explicit));
   else
     throw new T("Schema.extend argument should be a Type, [ Type ], or a schema definition ({ implicit: [...], explicit: [...] })");
-  t.forEach(function(o) {
+  t.forEach(function (o) {
     if (!(o instanceof E))
       throw new T("Specified list of YAML types (or a single Type object) contains a non-Type object.");
     if (o.loadKind && o.loadKind !== "scalar")
       throw new T("There is a non-scalar type in the implicit list of a schema. Implicit resolving of such types is not supported.");
     if (o.multi)
       throw new T("There is a multi type in the implicit list of a schema. Multi tags can only be listed as explicit.");
-  }), i.forEach(function(o) {
+  }), i.forEach(function (o) {
     if (!(o instanceof E))
       throw new T("Specified list of YAML types (or a single Type object) contains a non-Type object.");
   });
@@ -3137,17 +3137,17 @@ ze.prototype.extend = function(r) {
 };
 var Yr = ze, qr = new E("tag:yaml.org,2002:str", {
   kind: "scalar",
-  construct: function(e) {
+  construct: function (e) {
     return e !== null ? e : "";
   }
 }), Wr = new E("tag:yaml.org,2002:seq", {
   kind: "sequence",
-  construct: function(e) {
+  construct: function (e) {
     return e !== null ? e : [];
   }
 }), Gr = new E("tag:yaml.org,2002:map", {
   kind: "mapping",
-  construct: function(e) {
+  construct: function (e) {
     return e !== null ? e : {};
   }
 }), Kr = new Yr({
@@ -3174,19 +3174,19 @@ var Zr = new E("tag:yaml.org,2002:null", {
   construct: Qr,
   predicate: Xr,
   represent: {
-    canonical: function() {
+    canonical: function () {
       return "~";
     },
-    lowercase: function() {
+    lowercase: function () {
       return "null";
     },
-    uppercase: function() {
+    uppercase: function () {
       return "NULL";
     },
-    camelcase: function() {
+    camelcase: function () {
       return "Null";
     },
-    empty: function() {
+    empty: function () {
       return "";
     }
   },
@@ -3209,13 +3209,13 @@ var ii = new E("tag:yaml.org,2002:bool", {
   construct: ti,
   predicate: ri,
   represent: {
-    lowercase: function(e) {
+    lowercase: function (e) {
       return e ? "true" : "false";
     },
-    uppercase: function(e) {
+    uppercase: function (e) {
       return e ? "TRUE" : "FALSE";
     },
-    camelcase: function(e) {
+    camelcase: function (e) {
       return e ? "True" : "False";
     }
   },
@@ -3289,17 +3289,17 @@ var ui = new E("tag:yaml.org,2002:int", {
   construct: li,
   predicate: ci,
   represent: {
-    binary: function(e) {
+    binary: function (e) {
       return e >= 0 ? "0b" + e.toString(2) : "-0b" + e.toString(2).slice(1);
     },
-    octal: function(e) {
+    octal: function (e) {
       return e >= 0 ? "0o" + e.toString(8) : "-0o" + e.toString(8).slice(1);
     },
-    decimal: function(e) {
+    decimal: function (e) {
       return e.toString(10);
     },
     /* eslint-disable max-len */
-    hexadecimal: function(e) {
+    hexadecimal: function (e) {
       return e >= 0 ? "0x" + e.toString(16).toUpperCase() : "-0x" + e.toString(16).toUpperCase().slice(1);
     }
   },
@@ -3316,8 +3316,8 @@ var ui = new E("tag:yaml.org,2002:int", {
 );
 function di(e) {
   return !(e === null || !pi.test(e) || // Quick hack to not allow integers end with `_`
-  // Probably should update regexp & check speed
-  e[e.length - 1] === "_");
+    // Probably should update regexp & check speed
+    e[e.length - 1] === "_");
 }
 function hi(e) {
   var r, t;
@@ -3388,7 +3388,7 @@ function yi(e) {
   if (t = +r[1], i = +r[2] - 1, n = +r[3], !r[4])
     return new Date(Date.UTC(t, i, n));
   if (o = +r[4], s = +r[5], a = +r[6], r[7]) {
-    for (l = r[7].slice(0, 3); l.length < 3; )
+    for (l = r[7].slice(0, 3); l.length < 3;)
       l += "0";
     l = +l;
   }
@@ -3574,11 +3574,11 @@ function Fe(e, r) {
   e.onWarning && e.onWarning.call(null, Mt(e, r));
 }
 var lt = {
-  YAML: function(r, t, i) {
+  YAML: function (r, t, i) {
     var n, o, s;
     r.version !== null && m(r, "duplication of %YAML directive"), i.length !== 1 && m(r, "YAML directive accepts exactly one argument"), n = /^([0-9]+)\.([0-9]+)$/.exec(i[0]), n === null && m(r, "ill-formed argument of the YAML directive"), o = parseInt(n[1], 10), s = parseInt(n[2], 10), o !== 1 && m(r, "unacceptable YAML version of the document"), r.version = i[0], r.checkLineBreaks = s < 2, s !== 1 && s !== 2 && Fe(r, "unsupported YAML version of the document");
   },
-  TAG: function(r, t, i) {
+  TAG: function (r, t, i) {
     var n, o;
     i.length !== 2 && m(r, "TAG directive accepts exactly two arguments"), n = i[0], o = i[1], Nt.test(n) || m(r, "ill-formed tag handle (first argument) of the TAG directive"), q.call(r.tagMap, n) && m(r, 'there is a previously declared suffix for "' + n + '" tag handle'), It.test(o) || m(r, "ill-formed tag prefix (second argument) of the TAG directive");
     try {
@@ -3629,15 +3629,15 @@ function Qe(e) {
   r = e.input.charCodeAt(e.position), r === 10 ? e.position++ : r === 13 ? (e.position++, e.input.charCodeAt(e.position) === 10 && e.position++) : m(e, "a line break is expected"), e.line += 1, e.lineStart = e.position, e.firstTabInLine = -1;
 }
 function S(e, r, t) {
-  for (var i = 0, n = e.input.charCodeAt(e.position); n !== 0; ) {
-    for (; ne(n); )
+  for (var i = 0, n = e.input.charCodeAt(e.position); n !== 0;) {
+    for (; ne(n);)
       n === 9 && e.firstTabInLine === -1 && (e.firstTabInLine = e.position), n = e.input.charCodeAt(++e.position);
     if (r && n === 35)
       do
         n = e.input.charCodeAt(++e.position);
       while (n !== 10 && n !== 13 && n !== 0);
     if (D(n))
-      for (Qe(e), n = e.input.charCodeAt(e.position), i++, e.lineIndent = 0; n === 32; )
+      for (Qe(e), n = e.input.charCodeAt(e.position), i++, e.lineIndent = 0; n === 32;)
         e.lineIndent++, n = e.input.charCodeAt(++e.position);
     else
       break;
@@ -3656,7 +3656,7 @@ function Zi(e, r, t) {
   var i, n, o, s, a, l, c, d, p = e.kind, h = e.result, f;
   if (f = e.input.charCodeAt(e.position), N(f) || ae(f) || f === 35 || f === 38 || f === 42 || f === 33 || f === 124 || f === 62 || f === 39 || f === 34 || f === 37 || f === 64 || f === 96 || (f === 63 || f === 45) && (n = e.input.charCodeAt(e.position + 1), N(n) || t && ae(n)))
     return !1;
-  for (e.kind = "scalar", e.result = "", o = s = e.position, a = !1; f !== 0; ) {
+  for (e.kind = "scalar", e.result = "", o = s = e.position, a = !1; f !== 0;) {
     if (f === 58) {
       if (n = e.input.charCodeAt(e.position + 1), N(n) || t && ae(n))
         break;
@@ -3683,7 +3683,7 @@ function en(e, r) {
   var t, i, n;
   if (t = e.input.charCodeAt(e.position), t !== 39)
     return !1;
-  for (e.kind = "scalar", e.result = "", e.position++, i = n = e.position; (t = e.input.charCodeAt(e.position)) !== 0; )
+  for (e.kind = "scalar", e.result = "", e.position++, i = n = e.position; (t = e.input.charCodeAt(e.position)) !== 0;)
     if (t === 39)
       if (Y(e, i, e.position, !0), t = e.input.charCodeAt(++e.position), t === 39)
         i = e.position, e.position++, n = e.position;
@@ -3696,7 +3696,7 @@ function tn(e, r) {
   var t, i, n, o, s, a;
   if (a = e.input.charCodeAt(e.position), a !== 34)
     return !1;
-  for (e.kind = "scalar", e.result = "", e.position++, t = i = e.position; (a = e.input.charCodeAt(e.position)) !== 0; ) {
+  for (e.kind = "scalar", e.result = "", e.position++, t = i = e.position; (a = e.input.charCodeAt(e.position)) !== 0;) {
     if (a === 34)
       return Y(e, t, e.position, !0), e.position++, !0;
     if (a === 92) {
@@ -3723,7 +3723,7 @@ function rn(e, r) {
     d = 125, f = !0, a = {};
   else
     return !1;
-  for (e.anchor !== null && (e.anchorMap[e.anchor] = a), w = e.input.charCodeAt(++e.position); w !== 0; ) {
+  for (e.anchor !== null && (e.anchorMap[e.anchor] = a), w = e.input.charCodeAt(++e.position); w !== 0;) {
     if (S(e, !0, r), w = e.input.charCodeAt(e.position), w === d)
       return e.position++, e.tag = s, e.anchor = l, e.kind = f ? "mapping" : "sequence", e.result = a, !0;
     t ? w === 44 && m(e, "expected the node content, but found ','") : m(e, "missed comma between flow collection entries"), y = v = O = null, p = h = !1, w === 63 && (c = e.input.charCodeAt(e.position + 1), N(c) && (p = h = !0, e.position++, S(e, !0, r))), i = e.line, n = e.lineStart, o = e.position, me(e, r, Ne, !1, !0), y = e.tag, v = e.result, S(e, !0, r), w = e.input.charCodeAt(e.position), (h || e.line === i) && w === 58 && (p = !0, w = e.input.charCodeAt(++e.position), S(e, !0, r), me(e, r, Ne, !1, !0), O = e.result), f ? le(e, a, b, y, v, O, i, n, o) : p ? a.push(le(e, null, b, y, v, O, i, n, o)) : a.push(v), S(e, !0, r), w = e.input.charCodeAt(e.position), w === 44 ? (t = !0, w = e.input.charCodeAt(++e.position)) : t = !1;
@@ -3738,7 +3738,7 @@ function nn(e, r) {
     i = !0;
   else
     return !1;
-  for (e.kind = "scalar", e.result = ""; p !== 0; )
+  for (e.kind = "scalar", e.result = ""; p !== 0;)
     if (p = e.input.charCodeAt(++e.position), p === 43 || p === 45)
       $e === n ? n = p === 43 ? ot : zi : m(e, "repeat of a chomping mode identifier");
     else if ((d = Ji(p)) >= 0)
@@ -3754,8 +3754,8 @@ function nn(e, r) {
         p = e.input.charCodeAt(++e.position);
       while (!D(p) && p !== 0);
   }
-  for (; p !== 0; ) {
-    for (Qe(e), e.lineIndent = 0, p = e.input.charCodeAt(e.position); (!s || e.lineIndent < a) && p === 32; )
+  for (; p !== 0;) {
+    for (Qe(e), e.lineIndent = 0, p = e.input.charCodeAt(e.position); (!s || e.lineIndent < a) && p === 32;)
       e.lineIndent++, p = e.input.charCodeAt(++e.position);
     if (!s && e.lineIndent > a && (a = e.lineIndent), D(p)) {
       l++;
@@ -3771,7 +3771,7 @@ function nn(e, r) {
 `, o ? 1 + l : l)) : c ? (c = !1, e.result += A.repeat(`
 `, l + 1)) : l === 0 ? o && (e.result += " ") : e.result += A.repeat(`
 `, l) : e.result += A.repeat(`
-`, o ? 1 + l : l), o = !0, s = !0, l = 0, t = e.position; !D(p) && p !== 0; )
+`, o ? 1 + l : l), o = !0, s = !0, l = 0, t = e.position; !D(p) && p !== 0;)
       p = e.input.charCodeAt(++e.position);
     Y(e, t, e.position, !1);
   }
@@ -3780,7 +3780,7 @@ function nn(e, r) {
 function ut(e, r) {
   var t, i = e.tag, n = e.anchor, o = [], s, a = !1, l;
   if (e.firstTabInLine !== -1) return !1;
-  for (e.anchor !== null && (e.anchorMap[e.anchor] = o), l = e.input.charCodeAt(e.position); l !== 0 && (e.firstTabInLine !== -1 && (e.position = e.firstTabInLine, m(e, "tab characters must not be used in indentation")), !(l !== 45 || (s = e.input.charCodeAt(e.position + 1), !N(s)))); ) {
+  for (e.anchor !== null && (e.anchorMap[e.anchor] = o), l = e.input.charCodeAt(e.position); l !== 0 && (e.firstTabInLine !== -1 && (e.position = e.firstTabInLine, m(e, "tab characters must not be used in indentation")), !(l !== 45 || (s = e.input.charCodeAt(e.position + 1), !N(s))));) {
     if (a = !0, e.position++, S(e, !0, -1) && e.lineIndent <= r) {
       o.push(null), l = e.input.charCodeAt(e.position);
       continue;
@@ -3795,14 +3795,14 @@ function ut(e, r) {
 function on(e, r, t) {
   var i, n, o, s, a, l, c = e.tag, d = e.anchor, p = {}, h = /* @__PURE__ */ Object.create(null), f = null, b = null, v = null, y = !1, O = !1, w;
   if (e.firstTabInLine !== -1) return !1;
-  for (e.anchor !== null && (e.anchorMap[e.anchor] = p), w = e.input.charCodeAt(e.position); w !== 0; ) {
+  for (e.anchor !== null && (e.anchorMap[e.anchor] = p), w = e.input.charCodeAt(e.position); w !== 0;) {
     if (!y && e.firstTabInLine !== -1 && (e.position = e.firstTabInLine, m(e, "tab characters must not be used in indentation")), i = e.input.charCodeAt(e.position + 1), o = e.line, (w === 63 || w === 58) && N(i))
       w === 63 ? (y && (le(e, p, h, f, b, null, s, a, l), f = b = v = null), O = !0, y = !0, n = !0) : y ? (y = !1, n = !0) : m(e, "incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line"), e.position += 1, w = i;
     else {
       if (s = e.line, a = e.lineStart, l = e.position, !me(e, t, Rt, !1, !0))
         break;
       if (e.line === o) {
-        for (w = e.input.charCodeAt(e.position); ne(w); )
+        for (w = e.input.charCodeAt(e.position); ne(w);)
           w = e.input.charCodeAt(++e.position);
         if (w === 58)
           w = e.input.charCodeAt(++e.position), N(w) || m(e, "a whitespace character is expected after the key-value separator within a block mapping"), y && (le(e, p, h, f, b, null, s, a, l), f = b = v = null), O = !0, y = !1, n = !1, f = e.tag, b = e.result;
@@ -3831,7 +3831,7 @@ function sn(e) {
     while (s !== 0 && s !== 62);
     e.position < e.length ? (o = e.input.slice(r, e.position), s = e.input.charCodeAt(++e.position)) : m(e, "unexpected end of the stream within a verbatim tag");
   } else {
-    for (; s !== 0 && !N(s); )
+    for (; s !== 0 && !N(s);)
       s === 33 && (i ? m(e, "tag suffix cannot contain exclamation marks") : (n = e.input.slice(r - 1, e.position + 1), Nt.test(n) || m(e, "named tag handle cannot contain such characters"), i = !0, r = e.position + 1)), s = e.input.charCodeAt(++e.position);
     o = e.input.slice(r, e.position), Wi.test(o) && m(e, "tag suffix cannot contain flow indicator characters");
   }
@@ -3846,21 +3846,21 @@ function sn(e) {
 function an(e) {
   var r, t;
   if (t = e.input.charCodeAt(e.position), t !== 38) return !1;
-  for (e.anchor !== null && m(e, "duplication of an anchor property"), t = e.input.charCodeAt(++e.position), r = e.position; t !== 0 && !N(t) && !ae(t); )
+  for (e.anchor !== null && m(e, "duplication of an anchor property"), t = e.input.charCodeAt(++e.position), r = e.position; t !== 0 && !N(t) && !ae(t);)
     t = e.input.charCodeAt(++e.position);
   return e.position === r && m(e, "name of an anchor node must contain at least one character"), e.anchor = e.input.slice(r, e.position), !0;
 }
 function ln(e) {
   var r, t, i;
   if (i = e.input.charCodeAt(e.position), i !== 42) return !1;
-  for (i = e.input.charCodeAt(++e.position), r = e.position; i !== 0 && !N(i) && !ae(i); )
+  for (i = e.input.charCodeAt(++e.position), r = e.position; i !== 0 && !N(i) && !ae(i);)
     i = e.input.charCodeAt(++e.position);
   return e.position === r && m(e, "name of an alias node must contain at least one character"), t = e.input.slice(r, e.position), q.call(e.anchorMap, t) || m(e, 'unidentified alias "' + t + '"'), e.result = e.anchorMap[t], S(e, !0, -1), !0;
 }
 function me(e, r, t, i, n) {
   var o, s, a, l = 1, c = !1, d = !1, p, h, f, b, v, y;
   if (e.listener !== null && e.listener("open", e), e.tag = null, e.anchor = null, e.kind = null, e.result = null, o = s = a = Ie === t || Tt === t, i && S(e, !0, -1) && (c = !0, e.lineIndent > r ? l = 1 : e.lineIndent === r ? l = 0 : e.lineIndent < r && (l = -1)), l === 1)
-    for (; sn(e) || an(e); )
+    for (; sn(e) || an(e);)
       S(e, !0, -1) ? (c = !0, a = o, e.lineIndent > r ? l = 1 : e.lineIndent === r ? l = 0 : e.lineIndent < r && (l = -1)) : a = !1;
   if (a && (a = c || n), (l === 1 || Ie === t) && (Ne === t || Rt === t ? v = r : v = r + 1, y = e.position - e.lineStart, l === 1 ? a && (ut(e, y) || on(e, y, v)) || rn(e, v) ? d = !0 : (s && nn(e, v) || en(e, v) || tn(e, v) ? d = !0 : ln(e) ? (d = !0, (e.tag !== null || e.anchor !== null) && m(e, "alias node should not have any properties")) : Zi(e, v, Ne === t) && (d = !0, e.tag === null && (e.tag = "?")), e.anchor !== null && (e.anchorMap[e.anchor] = e.result)) : l === 0 && (d = a && ut(e, y))), e.tag === null)
     e.anchor !== null && (e.anchorMap[e.anchor] = e.result);
@@ -3885,11 +3885,11 @@ function me(e, r, t, i, n) {
 }
 function cn(e) {
   var r = e.position, t, i, n, o = !1, s;
-  for (e.version = null, e.checkLineBreaks = e.legacy, e.tagMap = /* @__PURE__ */ Object.create(null), e.anchorMap = /* @__PURE__ */ Object.create(null); (s = e.input.charCodeAt(e.position)) !== 0 && (S(e, !0, -1), s = e.input.charCodeAt(e.position), !(e.lineIndent > 0 || s !== 37)); ) {
-    for (o = !0, s = e.input.charCodeAt(++e.position), t = e.position; s !== 0 && !N(s); )
+  for (e.version = null, e.checkLineBreaks = e.legacy, e.tagMap = /* @__PURE__ */ Object.create(null), e.anchorMap = /* @__PURE__ */ Object.create(null); (s = e.input.charCodeAt(e.position)) !== 0 && (S(e, !0, -1), s = e.input.charCodeAt(e.position), !(e.lineIndent > 0 || s !== 37));) {
+    for (o = !0, s = e.input.charCodeAt(++e.position), t = e.position; s !== 0 && !N(s);)
       s = e.input.charCodeAt(++e.position);
-    for (i = e.input.slice(t, e.position), n = [], i.length < 1 && m(e, "directive name must not be less than one character in length"); s !== 0; ) {
-      for (; ne(s); )
+    for (i = e.input.slice(t, e.position), n = [], i.length < 1 && m(e, "directive name must not be less than one character in length"); s !== 0;) {
+      for (; ne(s);)
         s = e.input.charCodeAt(++e.position);
       if (s === 35) {
         do
@@ -3898,7 +3898,7 @@ function cn(e) {
         break;
       }
       if (D(s)) break;
-      for (t = e.position; s !== 0 && !N(s); )
+      for (t = e.position; s !== 0 && !N(s);)
         s = e.input.charCodeAt(++e.position);
       n.push(e.input.slice(t, e.position));
     }
@@ -3917,9 +3917,9 @@ function un(e, r) {
   e = String(e), r = r || {}, e.length !== 0 && (e.charCodeAt(e.length - 1) !== 10 && e.charCodeAt(e.length - 1) !== 13 && (e += `
 `), e.charCodeAt(0) === 65279 && (e = e.slice(1)));
   var t = new Xi(e, r), i = e.indexOf("\0");
-  for (i !== -1 && (t.position = i, m(t, "null byte is not allowed in input")), t.input += "\0"; t.input.charCodeAt(t.position) === 32; )
+  for (i !== -1 && (t.position = i, m(t, "null byte is not allowed in input")), t.input += "\0"; t.input.charCodeAt(t.position) === 32;)
     t.lineIndent += 1, t.position += 1;
-  for (; t.position < t.length - 1; )
+  for (; t.position < t.length - 1;)
     cn(t);
   return t.documents;
 }
@@ -3991,7 +3991,7 @@ function Pn(e) {
   this.schema = e.schema || Ot, this.indent = Math.max(1, e.indent || 2), this.noArrayIndent = e.noArrayIndent || !1, this.skipInvalid = e.skipInvalid || !1, this.flowLevel = A.isNothing(e.flowLevel) ? -1 : e.flowLevel, this.styleMap = Nn(this.schema, e.styles || null), this.sortKeys = e.sortKeys || !1, this.lineWidth = e.lineWidth || 80, this.noRefs = e.noRefs || !1, this.noCompatMode = e.noCompatMode || !1, this.condenseFlow = e.condenseFlow || !1, this.quotingType = e.quotingType === '"' ? xe : Fn, this.forceQuotes = e.forceQuotes || !1, this.replacer = typeof e.replacer == "function" ? e.replacer : null, this.implicitTypes = this.schema.compiledImplicit, this.explicitTypes = this.schema.compiledExplicit, this.tag = null, this.result = "", this.duplicates = [], this.usedDuplicates = null;
 }
 function pt(e, r) {
-  for (var t = A.repeat(" ", r), i = 0, n = -1, o = "", s, a = e.length; i < a; )
+  for (var t = A.repeat(" ", r), i = 0, n = -1, o = "", s, a = e.length; i < a;)
     n = e.indexOf(`
 `, i), n === -1 ? (s = e.slice(i), i = a) : (s = e.slice(i, n + 1), i = n + 1), s.length && s !== `
 ` && (o += t), o += s;
@@ -4054,7 +4054,7 @@ function Vn(e, r, t, i, n, o, s, a) {
     for (l = 0; l < e.length; c >= 65536 ? l += 2 : l++) {
       if (c = ge(e, l), c === ve)
         p = !0, f && (h = h || // Foldable line = too long, and not more-indented.
-        l - b - 1 > i && e[b + 1] !== " ", b = l);
+          l - b - 1 > i && e[b + 1] !== " ", b = l);
       else if (!we(c))
         return se;
       v = v && ht(c, d, a), d = c;
@@ -4064,7 +4064,7 @@ function Vn(e, r, t, i, n, o, s, a) {
   return !p && !h ? v && !s && !n(e) ? Yt : o === xe ? se : We : t > 9 && zt(e) ? se : s ? o === xe ? se : We : h ? Wt : qt;
 }
 function Hn(e, r, t, i, n) {
-  e.dump = function() {
+  e.dump = function () {
     if (r.length === 0)
       return e.quotingType === xe ? '""' : "''";
     if (!e.noCompatMode && (Rn.indexOf(r) !== -1 || Tn.test(r)))
@@ -4111,12 +4111,12 @@ function mt(e) {
 ` ? e.slice(0, -1) : e;
 }
 function Bn(e, r) {
-  for (var t = /(\n+)([^\n]*)/g, i = function() {
+  for (var t = /(\n+)([^\n]*)/g, i = function () {
     var c = e.indexOf(`
 `);
     return c = c !== -1 ? c : e.length, t.lastIndex = c, gt(e.slice(0, c), r);
   }(), n = e[0] === `
-` || e[0] === " ", o, s; s = t.exec(e); ) {
+` || e[0] === " ", o, s; s = t.exec(e);) {
     var a = s[1], l = s[2];
     o = l[0] === " ", i += a + (!n && !o && l !== "" ? `
 ` : "") + gt(l, r), n = o;
@@ -4125,7 +4125,7 @@ function Bn(e, r) {
 }
 function gt(e, r) {
   if (e === "" || e[0] === " ") return e;
-  for (var t = / [^ ]/g, i, n = 0, o, s = 0, a = 0, l = ""; i = t.exec(e); )
+  for (var t = / [^ ]/g, i, n = 0, o, s = 0, a = 0, l = ""; i = t.exec(e);)
     a = i.index, a - n > r && (o = s > n ? s : a, l += `
 ` + e.slice(n, o), n = o + 1), s = a;
   return l += `
@@ -4530,9 +4530,33 @@ class Jt extends Oe {
     var n;
     return t.name = i, t.server = this.originConfig.hostname ?? "", t.port = Number(this.originConfig.port ?? 0), t.password = ((n = this.originConfig) == null ? void 0 : n.username) ?? "", t;
   }
-  restoreSingbox(t, i) {
-    var n;
-    return t.password = ((n = this.originConfig) == null ? void 0 : n.username) ?? "", t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.tag = i, t;
+  restoreSingbox(t, n) {
+    var i;
+    t.type = "hysteria2"; // 明确指定类型为 hysteria2
+    t.tag = n; // 设置 tag 为原始名称
+    t.server = this.originConfig.hostname ?? ""; // 设置服务器地址
+    t.server_port = Number(this.originConfig.port ?? 0); // 设置端口
+    t.password = ((i = this.originConfig) == null ? void 0 : i.username) ?? ""; // 设置密码
+  
+    // 从 URL 查询参数中提取 SNI，修正为 this.originConfig
+    const sni = this.originConfig.searchParams.get("sni") || 
+                this.originConfig.searchParams.get("servername") || 
+                this.originConfig.searchParams.get("host") || 
+                this.originConfig.hostname;
+  
+    // 添加 TLS 配置，确保 insecure 为 true
+    t.tls = t.tls || {}; // 如果已有 tls 配置，则合并而不是覆盖
+    t.tls.enabled = true; // 启用 TLS
+    t.tls.insecure = true; // 允许不安全的连接（跳过证书验证）
+    t.tls.server_name = this.isIP(sni) ? "" : sni; // 如果是 IP 地址，则留空
+  
+    return t;
+  }
+  
+  // 添加辅助方法判断是否为 IP 地址
+  isIP(str) {
+    const ipRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+    return ipRegex.test(str);
   }
   /**
    * @description 原始备注
@@ -4796,10 +4820,34 @@ class Zt extends Oe {
     var n, o;
     return t.name = i, t.server = this.originConfig.hostname ?? "", t.port = Number(((n = this.originConfig) == null ? void 0 : n.port) ?? 0), t.uuid = this.originConfig.username ?? "", t.alpn = t.alpn ? (o = t.alpn) == null ? void 0 : o.map((s) => decodeURIComponent(s)) : t.alpn, t;
   }
-  restoreSingbox(t, i) {
-    var n, o;
-    return t.tag = i, t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.uuid = this.originConfig.username ?? "", (n = t.tls) != null && n.server_name && (t.tls.server_name = this.originConfig.hostname ?? ""), (o = t.tls) != null && o.alpn && (t.tls.alpn = t.tls.alpn.map((s) => decodeURIComponent(s))), t;
-  }
+  restoreSingbox(t, n) {
+    var i;
+    t.type = "vless";
+    t.tag = n;
+    t.server = ((i = this.originConfig) == null ? void 0 : i.hostname) ?? "";
+    t.server_port = Number(this.originConfig.port ?? 0);
+    t.uuid = this.originConfig.username ?? "";
+    t.tls = t.tls || {};
+    t.tls.enabled = true;
+    
+    // 优先获取 SNI：sni > servername > host
+    const sni = this.originConfig.searchParams.get("sni") ||
+                this.originConfig.searchParams.get("servername") ||
+                this.originConfig.searchParams.get("host") ||
+                this.originConfig.hostname;
+    
+    // 如果 SNI 是 IP 地址，设置 server_name 为空
+    t.tls.server_name = this.isIP(sni) ? "" : sni;
+    
+    t.tls.insecure = false;
+    return t;
+}
+
+// 辅助方法：判断是否为 IP 地址
+isIP(str) {
+    const ipRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$|^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+    return ipRegex.test(str);
+}
   /**
    * @description 原始备注
    * @example '#originPs'
@@ -4931,7 +4979,7 @@ class er extends Oe {
     return u(this, U);
   }
 }
-he = new WeakMap(), Le = new WeakMap(), H = new WeakMap(), U = new WeakMap(), ie = new WeakMap(), fe = new WeakMap(), De = new WeakSet(), tr = function(t) {
+he = new WeakMap(), Le = new WeakMap(), H = new WeakMap(), U = new WeakMap(), ie = new WeakMap(), fe = new WeakMap(), De = new WeakSet(), tr = function (t) {
   t.network === "ws" && (t["ws-opts"] = {
     ...t["ws-opts"],
     path: this.originConfig.path,
@@ -4949,7 +4997,8 @@ class rr extends to {
     _(this, "originUrls", /* @__PURE__ */ new Set());
     _(this, "vps", []);
     _(this, "includeProtocol", []);
-    this.vps = t, this.includeProtocol = n ? JSON.parse(n) : [];
+    this.vps = t;
+    this.includeProtocol = n ? JSON.parse(n) : [];
   }
   async parse(t = this.vps) {
     for await (const i of t) {
@@ -5145,26 +5194,54 @@ class oo {
     _(this, "clashClient", new ro());
     _(this, "singboxClient", new io());
     _(this, "v2rayClient", new no(this.vps));
-    this.chunkCount = Number(r.CHUNK_COUNT ?? Re.CHUNK_COUNT), this.backend = r.BACKEND ?? Re.BACKEND, this.parser = null;
+    _(this, "subscriptionInfo", null); // 新增属性存储 subscription-userinfo
+    this.chunkCount = Number(r.CHUNK_COUNT ?? Re.CHUNK_COUNT);
+    this.backend = r.BACKEND ?? Re.BACKEND;
+    this.parser = null;
   }
+
   async setSubUrls(r) {
-    const { searchParams: t } = new URL(r.url), i = t.get("url"), n = t.get("protocol"), o = i.split(/\||\n/).filter(Boolean);
-    this.parser = new rr(o, [], n), this.vps = o, await this.parser.parse(o);
+    const { searchParams: t } = new URL(r.url),
+      i = t.get("url"),
+      n = t.get("protocol"),
+      o = i.split(/\||\n/).filter(Boolean);
+    this.parser = new rr(o, [], n);
+    this.vps = o;
+
+    // 捕获 subscription-userinfo
+    const responses = await Promise.all(
+      o.map(url =>
+        et(url, {
+          retries: 3,
+          headers: { "User-Agent": "clash.meta" }
+        }).then(res => res.headers["subscription-userinfo"]).catch(() => null)
+      )
+    );
+    this.subscriptionInfo = responses.find(info => info) || null;
+
+    // 保持原有解析逻辑
+    await this.parser.parse(o);
+
     const s = Qn(Array.from(this.parser.urls), Number(this.chunkCount));
     this.urls = s.map((a) => {
-      const l = new URL(`${this.backend}/sub`), { searchParams: c } = new URL(r.url);
+      const l = new URL(`${this.backend}/sub`),
+        { searchParams: c } = new URL(r.url);
       return c.set("url", a), l.search = c.toString(), l.toString();
     });
   }
+
   async getClashConfig() {
     return await this.clashClient.getConfig(this.urls);
   }
+
   async getSingboxConfig() {
     return await this.singboxClient.getConfig(this.urls);
   }
+
   async getV2RayConfig() {
     return await this.v2rayClient.getConfig(this.urls, this.vps);
   }
+
   get vpsStore() {
     var r;
     return (r = this.parser) == null ? void 0 : r.vpsMap;
@@ -5185,19 +5262,23 @@ class so {
   }
   restoreProxies(r, t) {
     try {
-      if (!r)
-        return [];
-      const i = [];
-      for (const n of r) {
-        const [o, s] = L.getPs(n.name);
-        if (t.has(s)) {
-          const a = t.get(s);
-          a == null || a.restoreClash(n, o), i.push(n);
+        if (!r)
+            return [];
+        const i = [];
+        for (const n of r) {
+            const [o, s] = L.getPs(n.name);
+            if (t.has(s)) {
+                const a = t.get(s);
+                a == null || a.restoreClash(n, o); // 调用原始的 restoreClash 方法
+                if (n.type === "hysteria2") {
+                    n["skip-cert-verify"] = true; // 为 Hysteria2 设置 skip-cert-verify
+                }
+                i.push(n);
+            }
         }
-      }
-      return i;
+        return i;
     } catch (i) {
-      throw new Error(`Restore proxies failed: ${i.message || i}, function trace: ${i.stack}`);
+        throw new Error(`Restore proxies failed: ${i.message || i}, function trace: ${i.stack}`);
     }
   }
   updateProxiesGroups(r) {
@@ -5381,7 +5462,33 @@ const Ct = new sr(), go = {
       if (e.method === "OPTIONS")
         return C.cors(new Response(null, { status: 200 }));
       const t = new uo(r.DB), i = new or(t);
-      Ct.get("/", (o) => Er(o, r)).get("/favicon.ico", () => new Response(null, { status: 200 })).get("/sub", (o) => i.toSub(o, r)).post("/api/add", (o) => i.add(o)).delete("/api/delete", (o) => i.delete(o)).get("/api/queryByCode", (o) => i.queryByCode(o)).get("/api/queryList", (o) => i.queryList(o)).get("/:code", (o) => i.redirect(o));
+      Ct.get("/", (o) => Er(o, r))
+        .get("/favicon.ico", () => new Response(null, { status: 200 }))
+        .get("/sub", async (o) => {
+          const response = await i.toSub(o, r);
+
+          // 创建 oo 实例以获取 subscriptionInfo
+          const n = new oo(r);
+          await n.setSubUrls(o);
+
+          if (n.subscriptionInfo) {
+            const headers = new Headers(response.headers);
+            headers.set("subscription-userinfo", n.subscriptionInfo);
+            return new Response(response.body, {
+              status: response.status,
+              statusText: response.statusText,
+              headers: headers,
+            });
+          }
+
+          return response;
+        })
+        .post("/api/add", (o) => i.add(o))
+        .delete("/api/delete", (o) => i.delete(o))
+        .get("/api/queryByCode", (o) => i.queryByCode(o))
+        .get("/api/queryList", (o) => i.queryList(o))
+        .get("/:code", (o) => i.redirect(o));
+
       const n = await Ct.handle(e, r);
       return C.cors(n);
     } catch (t) {
