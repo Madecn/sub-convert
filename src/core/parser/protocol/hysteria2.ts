@@ -203,7 +203,7 @@ export class Hysteria2Parser extends Faker {
         }
         
         // Always set skip-cert-verify to true (1)
-        proxy["skip-cert-verify"] = 1;
+        proxy["skip-cert-verify"] = true;
 
         // Add subscription-userinfo if available
         if (this.#subscriptionUserInfo) {

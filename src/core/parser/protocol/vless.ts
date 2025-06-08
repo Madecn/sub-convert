@@ -166,7 +166,7 @@ export class VlessParser extends Faker {
         }
 
         // Always set skip-cert-verify to true (1)
-        proxy["skip-cert-verify"] = 1;
+        proxy["skip-cert-verify"] = true;
 
         // 处理 ALPN
         if (proxy.alpn) {
