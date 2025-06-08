@@ -3,47 +3,62 @@ import { dump } from 'js-yaml';
 import { Confuse } from '../core/confuse';
 import { Restore } from '../core/restore';
 import { ResponseUtil } from '../shared/response';
+import { Subscription } from '../core/subscription';
 
 export class UrlService {
-    constructor(private db?: D1Database) {}
+    private subscription: Subscription;
+
+    constructor(private db?: D1Database) {
+        this.subscription = new Subscription();
+    }
 
     async toSub(request: Request, env: Env, convertType: string): Promise<Response> {
         try {
             const confuse = new Confuse(env);
             await confuse.setSubUrls(request);
 
+            // 获取订阅信息
+            const { searchParams } = new URL(request.url);
+            const vpsUrl = searchParams.get('url');
+            if (vpsUrl) {
+                const urls = vpsUrl.split(/\||\n/).filter(Boolean);
+                await this.subscription.fetchSubscriptionInfo(urls);
+            }
+
             const restore = new Restore(confuse);
+            let response: Response;
+
             if (['clash', 'clashr'].includes(convertType)) {
                 const originConfig = await restore.getClashConfig();
-                return new Response(dump(originConfig, { indent: 2, lineWidth: 200 }), {
+                response = new Response(dump(originConfig, { indent: 2, lineWidth: 200 }), {
                     headers: new Headers({
                         'Content-Type': 'text/yaml; charset=UTF-8',
                         'Cache-Control': 'no-store'
                     })
                 });
-            }
-
-            if (convertType === 'singbox') {
+            } else if (convertType === 'singbox') {
                 const originConfig = await restore.getSingboxConfig();
-                return new Response(JSON.stringify(originConfig), {
+                response = new Response(JSON.stringify(originConfig), {
                     headers: new Headers({
                         'Content-Type': 'text/plain; charset=UTF-8',
                         'Cache-Control': 'no-store'
                     })
                 });
-            }
-
-            if (convertType === 'v2ray') {
+            } else if (convertType === 'v2ray') {
                 const originConfig = await restore.getV2RayConfig();
-                return new Response(originConfig, {
+                response = new Response(originConfig, {
                     headers: new Headers({
                         'Content-Type': 'text/plain; charset=UTF-8',
                         'Cache-Control': 'no-store'
                     })
                 });
+            } else {
+                return ResponseUtil.error('Unsupported client type, support list: clash, singbox, v2ray');
             }
 
-            return ResponseUtil.error('Unsupported client type, support list: clash, singbox, v2ray');
+            // 添加订阅信息到响应头
+            response = this.subscription.addSubscriptionInfoToResponse(response);
+            return ResponseUtil.cors(response);
         } catch (error: any) {
             throw new Error(error.message || 'Invalid request');
         }

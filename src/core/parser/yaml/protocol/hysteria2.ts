@@ -16,22 +16,39 @@ export function hysteria2Convert(config: Record<string, any>): string {
 
     const parameters = new URLSearchParams();
 
+    // 基本参数
     parameters.append('password', password);
 
     // TLS/安全性 相关参数
-    const sni = config.sni || config.servername || config.server;
+    // 优先级：sni > servername > host > server
+    const sni = config.sni || config.servername || config.host || config.server;
     if (sni) {
         parameters.append('sni', sni);
     }
-    // insecure 参数对应 skip-cert-verify
-    if (config.insecure || config['skip-cert-verify']) {
-        parameters.append('insecure', '1');
-    }
-    if (config.alpn && (typeof config.alpn === 'string' || Array.isArray(config.alpn))) {
-        parameters.append('alpn', Array.isArray(config.alpn) ? config.alpn.join(',') : config.alpn);
+
+    // TLS 配置
+    if (config.tls) {
+        // insecure 参数对应 skip-cert-verify 或 tls.insecure
+        if (config.tls.insecure || config.insecure || config['skip-cert-verify']) {
+            parameters.append('insecure', '1');
+        }
+        // ALPN 配置
+        if (config.tls.alpn) {
+            const alpn = Array.isArray(config.tls.alpn) ? config.tls.alpn.join(',') : config.tls.alpn;
+            parameters.append('alpn', alpn);
+        }
+    } else {
+        // 兼容旧配置
+        if (config.insecure || config['skip-cert-verify']) {
+            parameters.append('insecure', '1');
+        }
+        if (config.alpn) {
+            const alpn = Array.isArray(config.alpn) ? config.alpn.join(',') : config.alpn;
+            parameters.append('alpn', alpn);
+        }
     }
 
-    // 混淆 Obfs 参数 (H2 的 obfs 类型可能与 H1 不同)
+    // 混淆 Obfs 参数
     if (config.obfs) {
         parameters.append('obfs', config.obfs);
     }
@@ -39,8 +56,21 @@ export function hysteria2Convert(config: Record<string, any>): string {
         parameters.append('obfs-param', config['obfs-param']);
     }
 
-    const queryString = parameters.toString();
+    // 上下行速率
+    if (config.up) {
+        parameters.append('up', config.up.toString());
+    }
+    if (config.down) {
+        parameters.append('down', config.down.toString());
+    }
 
+    // 订阅信息
+    if (config.subscription_userinfo || config['subscription-userinfo']) {
+        const userInfo = config.subscription_userinfo || config['subscription-userinfo'];
+        parameters.append('subscription-userinfo', userInfo);
+    }
+
+    const queryString = parameters.toString();
     const encodedServer = encodeURIComponent(server);
     const encodedRemarks = encodeURIComponent(remarks);
 
