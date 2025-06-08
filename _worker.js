@@ -4566,7 +4566,7 @@ class nt extends Ie {
   restoreClash(t, i) {
     t.name = i, t.server = u(this, A).hostname, t.port = Number(u(this, A).port) || 0, t.password = u(this, A).username;
     const n = u(this, A).searchParams.get("sni") || u(this, A).searchParams.get("servername") || u(this, A).searchParams.get("host") || u(this, A).hostname;
-    return n && !Lt(n) ? t.sni = n : t.sni = "", t["skip-cert-verify"] = 1, u(this, D) && (t["subscription-userinfo"] = u(this, D)), t.down && (t.down = decodeURIComponent(t.down)), t.up && (t.up = decodeURIComponent(t.up)), t;
+    return n && !Lt(n) ? t.sni = n : t.sni = "", t["skip-cert-verify"] = !0, u(this, D) && (t["subscription-userinfo"] = u(this, D)), t.down && (t.down = decodeURIComponent(t.down)), t.up && (t.up = decodeURIComponent(t.up)), t;
   }
   /**
    * @description 原始备注
@@ -4849,7 +4849,7 @@ class ot extends Ie {
   restoreClash(t, i) {
     t.name = i, t.server = this.originConfig.hostname ?? "", t.port = Number(this.originConfig.port ?? 0), t.uuid = this.originConfig.username ?? "";
     const n = this.originConfig.searchParams.get("sni") || this.originConfig.searchParams.get("servername") || this.originConfig.searchParams.get("host") || this.originConfig.hostname;
-    return n && !Rt(n) ? t.sni = n : t.sni = "", t["skip-cert-verify"] = 1, t.alpn && (t.alpn = Array.isArray(t.alpn) ? t.alpn.map((o) => decodeURIComponent(o)) : t.alpn), u(this, Y) && (t["subscription-userinfo"] = u(this, Y)), t;
+    return n && !Rt(n) ? t.sni = n : t.sni = "", t["skip-cert-verify"] = !0, t.alpn && (t.alpn = Array.isArray(t.alpn) ? t.alpn.map((o) => decodeURIComponent(o)) : t.alpn), u(this, Y) && (t["subscription-userinfo"] = u(this, Y)), t;
   }
   /**
    * @description 原始备注
