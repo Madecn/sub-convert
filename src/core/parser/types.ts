@@ -39,7 +39,14 @@ export interface VmessConfig {
     [key: string]: any;
 }
 
-export interface VlessConfig extends BaseConfig {}
+export interface VlessConfig {
+    hostname: string;
+    username: string;
+    port: string;
+    searchParams: URLSearchParams;
+    hash: string;
+    href: string;
+}
 
 export interface TrojanConfig extends BaseConfig {}
 

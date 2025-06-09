@@ -38,10 +38,10 @@ export class VlessParser extends Faker {
     #confuseLink: string = '';
 
     /** * @description vps原始配置 */
-    #originConfig: Partial<VlessConfig> = {};
+    #originConfig: URL = new URL('vless://localhost');
 
     /** * @description 混淆配置 */
-    #confuseConfig: Partial<VlessConfig> = {};
+    #confuseConfig: URL = new URL('vless://localhost');
 
     /** * @description 原始备注 */
     #originPs: string = '';
@@ -98,7 +98,6 @@ export class VlessParser extends Faker {
     private setConfuseConfig(v: string): void {
         this.#confuseConfig = new URL(v);
         this.#confuseConfig.username = this.getUsername();
-        this.#confuseConfig.host = this.getHost();
         this.#confuseConfig.hostname = this.getHostName();
         this.#confuseConfig.port = this.getPort();
         this.#confuseConfig.hash = PsUtil.setPs(this.#originPs, this.#confusePs);
@@ -109,36 +108,70 @@ export class VlessParser extends Faker {
         // Basic configuration
         outbound.type = "vless";
         outbound.tag = ps;
-        outbound.server = this.originConfig.hostname ?? '';
-        outbound.server_port = Number(this.originConfig.port ?? 0);
-        outbound.uuid = this.originConfig.username ?? '';
+        outbound.server = this.#originConfig.hostname;
+        outbound.server_port = Number(this.#originConfig.port) || 0;
+        outbound.uuid = this.#originConfig.username;
 
-        // TLS configuration
-        const sni = this.originConfig.searchParams.get("sni") ||
-                   this.originConfig.searchParams.get("servername") ||
-                   this.originConfig.searchParams.get("host") ||
-                   this.originConfig.hostname;
+        // Get security type
+        const security = this.#originConfig.searchParams.get("security") || "none";
 
-        // 新版本 sing-box 的 TLS 配置结构
-        const tls: Record<string, any> = {
-            enabled: true,
-            insecure: true, // 对应原来的 skip_cert_verify = 1
-            disable_sni: false
-        };
+        // Handle Reality settings
+        if (security === "reality") {
+            const sni = this.#originConfig.searchParams.get("sni") || '';
+            const publicKey = this.#originConfig.searchParams.get("pbk") || '';
+            const shortId = this.#originConfig.searchParams.get("sid") || '';
+            const fingerprint = this.#originConfig.searchParams.get("fp") || 'chrome';
 
-        // 只在非 IP 地址时设置 server_name
-        if (sni && !isIP(sni)) {
-            tls.server_name = sni;
+            outbound.tls = {
+                enabled: true,
+                server_name: sni,
+                reality: {
+                    enabled: true,
+                    public_key: publicKey,
+                    short_id: shortId
+                },
+                utls: {
+                    enabled: true,
+                    fingerprint: fingerprint
+                }
+            };
+        } else if (security === "tls") {
+            // TLS configuration
+            const sni = this.#originConfig.searchParams.get("sni") ||
+                       this.#originConfig.searchParams.get("servername") ||
+                       this.#originConfig.searchParams.get("host") ||
+                       this.#originConfig.hostname;
+
+            const tls: Record<string, any> = {
+                enabled: true,
+                insecure: true,
+                disable_sni: false
+            };
+
+            // Only set server_name for non-IP addresses
+            if (sni && !isIP(sni)) {
+                tls.server_name = sni;
+            }
+
+            // Handle uTLS fingerprint
+            const fingerprint = this.#originConfig.searchParams.get("fp");
+            if (fingerprint) {
+                tls.utls = {
+                    enabled: true,
+                    fingerprint: fingerprint
+                };
+            }
+
+            outbound.tls = tls;
         }
 
-        // 处理 ALPN
-        if (outbound.tls?.alpn) {
-            tls.alpn = outbound.tls.alpn.map((i: string) => decodeURIComponent(i));
+        // Handle flow settings
+        const flow = this.#originConfig.searchParams.get("flow");
+        if (flow) {
+            outbound.flow = flow;
         }
 
-        outbound.tls = tls;
-
-        // 保存订阅信息
+        // Save subscription info
         if (this.#subscriptionUserInfo) {
             outbound.subscription_userinfo = this.#subscriptionUserInfo;
         }
@@ -200,7 +233,7 @@ export class VlessParser extends Faker {
     /**
      * @description 原始配置
      */
-    get originConfig(): Partial<VlessConfig> {
+    get originConfig(): URL {
         return this.#originConfig;
     }
 
@@ -223,7 +256,7 @@ export class VlessParser extends Faker {
     /**
      * @description 混淆配置
      */
-    get confuseConfig(): Partial<VlessConfig> {
+    get confuseConfig(): URL {
         return this.#confuseConfig;
     }
 
