@@ -3,7 +3,7 @@ var at = (e) => {
   throw TypeError(e);
 };
 var cr = (e, r, t) => r in e ? lr(e, r, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[r] = t;
-var k = (e, r, t) => cr(e, typeof r != "symbol" ? r + "" : r, t), ze = (e, r, t) => r.has(e) || at("Cannot " + t);
+var S = (e, r, t) => cr(e, typeof r != "symbol" ? r + "" : r, t), ze = (e, r, t) => r.has(e) || at("Cannot " + t);
 var p = (e, r, t) => (ze(e, r, "read from private field"), t ? t.call(e) : r.get(e)), x = (e, r, t) => r.has(e) ? at("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(e) : r.set(e, t), w = (e, r, t, n) => (ze(e, r, "write to private field"), n ? n.call(e, t) : r.set(e, t), t), Ye = (e, r, t) => (ze(e, r, "access private method"), t);
 function Lt() {
   return [
@@ -110,7 +110,7 @@ class ur {
 }
 class pr {
   constructor() {
-    k(this, "routes", []);
+    S(this, "routes", []);
   }
   get(r, t) {
     return this.add("GET", r, t), this;
@@ -2268,6 +2268,10 @@ function Ar(e) {
     }), n),
     [
       {
+        label: "自用默认分组",
+        value: "https://raw.githubusercontent.com/Madecn/Online_ACL4SSR/refs/heads/main/ACL4SSR_Online_MultiMode.ini"
+      },
+      {
         label: "ACL4SSR_Online 默认版 分组比较全 (与Github同步)",
         value: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online.ini"
       },
@@ -2754,7 +2758,7 @@ function Tr(e, r) {
                             target: '${o[0].value}',
                             config: '${t[0].value}',
                             backend: '${l}',
-                            protocol: '${JSON.stringify(a.map((h) => h.value))}',
+                            protocol: '${JSON.stringify(a.map((f) => f.value))}',
                             advanced: ['emoji', 'new_name'],
                             shortServe: '${((u = i[0]) == null ? void 0 : u.value) ?? ""}',
 
@@ -2979,10 +2983,10 @@ function Fr(e, r) {
 function Ur(e) {
   return e === 0 && Number.NEGATIVE_INFINITY === 1 / e;
 }
-var Mr = Rt, Dr = Nr, $r = Ir, Hr = Fr, jr = Ur, Br = Pr, E = {
+var Mr = Rt, $r = Nr, Dr = Ir, Hr = Fr, jr = Ur, Br = Pr, E = {
   isNothing: Mr,
-  isObject: Dr,
-  toArray: $r,
+  isObject: $r,
+  toArray: Dr,
   repeat: Hr,
   isNegativeZero: jr,
   extend: Br
@@ -3382,7 +3386,7 @@ function ki(e) {
   return e === null ? !1 : Nt.exec(e) !== null || It.exec(e) !== null;
 }
 function Ai(e) {
-  var r, t, n, i, o, s, a, l = 0, c = null, d, u, h;
+  var r, t, n, i, o, s, a, l = 0, c = null, d, u, f;
   if (r = Nt.exec(e), r === null && (r = It.exec(e)), r === null) throw new Error("Date resolve error");
   if (t = +r[1], n = +r[2] - 1, i = +r[3], !r[4])
     return new Date(Date.UTC(t, n, i));
@@ -3391,7 +3395,7 @@ function Ai(e) {
       l += "0";
     l = +l;
   }
-  return r[9] && (d = +r[10], u = +(r[11] || 0), c = (d * 60 + u) * 6e4, r[9] === "-" && (c = -c)), h = new Date(Date.UTC(t, n, i, o, s, a, l)), c && h.setTime(h.getTime() - c), h;
+  return r[9] && (d = +r[10], u = +(r[11] || 0), c = (d * 60 + u) * 6e4, r[9] === "-" && (c = -c)), f = new Date(Date.UTC(t, n, i, o, s, a, l)), c && f.setTime(f.getTime() - c), f;
 }
 function Ei(e) {
   return e.toISOString();
@@ -3443,7 +3447,7 @@ var Fi = new L("tag:yaml.org,2002:binary", {
   predicate: Pi,
   represent: Ii
 }), Ui = Object.prototype.hasOwnProperty, Mi = Object.prototype.toString;
-function Di(e) {
+function $i(e) {
   if (e === null) return !0;
   var r = [], t, n, i, o, s, a = e;
   for (t = 0, n = a.length; t < n; t += 1) {
@@ -3458,13 +3462,13 @@ function Di(e) {
   }
   return !0;
 }
-function $i(e) {
+function Di(e) {
   return e !== null ? e : [];
 }
 var Hi = new L("tag:yaml.org,2002:omap", {
   kind: "sequence",
-  resolve: Di,
-  construct: $i
+  resolve: $i,
+  construct: Di
 }), ji = Object.prototype.toString;
 function Bi(e) {
   if (e === null) return !0;
@@ -3513,11 +3517,11 @@ var Gi = new L("tag:yaml.org,2002:set", {
     qi,
     Gi
   ]
-}), W = Object.prototype.hasOwnProperty, Ue = 1, Ft = 2, Ut = 3, Me = 4, Ke = 1, Ki = 2, ut = 3, Ji = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/, Qi = /[\x85\u2028\u2029]/, Xi = /[,\[\]\{\}]/, Mt = /^(?:!|!!|![a-z\-]+!)$/i, Dt = /^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i;
+}), W = Object.prototype.hasOwnProperty, Ue = 1, Ft = 2, Ut = 3, Me = 4, Ke = 1, Ki = 2, ut = 3, Ji = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/, Qi = /[\x85\u2028\u2029]/, Xi = /[,\[\]\{\}]/, Mt = /^(?:!|!!|![a-z\-]+!)$/i, $t = /^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i;
 function pt(e) {
   return Object.prototype.toString.call(e);
 }
-function D(e) {
+function $(e) {
   return e === 10 || e === 13;
 }
 function se(e) {
@@ -3549,9 +3553,9 @@ function rn(e) {
     (e - 65536 & 1023) + 56320
   );
 }
-var $t = new Array(256), Ht = new Array(256);
+var Dt = new Array(256), Ht = new Array(256);
 for (var le = 0; le < 256; le++)
-  $t[le] = dt(le) ? 1 : 0, Ht[le] = dt(le);
+  Dt[le] = dt(le) ? 1 : 0, Ht[le] = dt(le);
 function nn(e, r) {
   this.input = e, this.filename = r.filename || null, this.schema = r.schema || Pt, this.onWarning = r.onWarning || null, this.legacy = r.legacy || !1, this.json = r.json || !1, this.listener = r.listener || null, this.implicitTypes = this.schema.compiledImplicit, this.typeMap = this.schema.compiledTypeMap, this.length = e.length, this.position = 0, this.line = 0, this.lineStart = 0, this.lineIndent = 0, this.firstTabInLine = -1, this.documents = [];
 }
@@ -3566,24 +3570,24 @@ function jt(e, r) {
   };
   return t.snippet = qr(t), new T(r, t);
 }
-function b(e, r) {
+function g(e, r) {
   throw jt(e, r);
 }
-function De(e, r) {
+function $e(e, r) {
   e.onWarning && e.onWarning.call(null, jt(e, r));
 }
 var ht = {
   YAML: function(r, t, n) {
     var i, o, s;
-    r.version !== null && b(r, "duplication of %YAML directive"), n.length !== 1 && b(r, "YAML directive accepts exactly one argument"), i = /^([0-9]+)\.([0-9]+)$/.exec(n[0]), i === null && b(r, "ill-formed argument of the YAML directive"), o = parseInt(i[1], 10), s = parseInt(i[2], 10), o !== 1 && b(r, "unacceptable YAML version of the document"), r.version = n[0], r.checkLineBreaks = s < 2, s !== 1 && s !== 2 && De(r, "unsupported YAML version of the document");
+    r.version !== null && g(r, "duplication of %YAML directive"), n.length !== 1 && g(r, "YAML directive accepts exactly one argument"), i = /^([0-9]+)\.([0-9]+)$/.exec(n[0]), i === null && g(r, "ill-formed argument of the YAML directive"), o = parseInt(i[1], 10), s = parseInt(i[2], 10), o !== 1 && g(r, "unacceptable YAML version of the document"), r.version = n[0], r.checkLineBreaks = s < 2, s !== 1 && s !== 2 && $e(r, "unsupported YAML version of the document");
   },
   TAG: function(r, t, n) {
     var i, o;
-    n.length !== 2 && b(r, "TAG directive accepts exactly two arguments"), i = n[0], o = n[1], Mt.test(i) || b(r, "ill-formed tag handle (first argument) of the TAG directive"), W.call(r.tagMap, i) && b(r, 'there is a previously declared suffix for "' + i + '" tag handle'), Dt.test(o) || b(r, "ill-formed tag prefix (second argument) of the TAG directive");
+    n.length !== 2 && g(r, "TAG directive accepts exactly two arguments"), i = n[0], o = n[1], Mt.test(i) || g(r, "ill-formed tag handle (first argument) of the TAG directive"), W.call(r.tagMap, i) && g(r, 'there is a previously declared suffix for "' + i + '" tag handle'), $t.test(o) || g(r, "ill-formed tag prefix (second argument) of the TAG directive");
     try {
       o = decodeURIComponent(o);
     } catch {
-      b(r, "tag prefix is malformed: " + o);
+      g(r, "tag prefix is malformed: " + o);
     }
     r.tagMap[i] = o;
   }
@@ -3593,21 +3597,21 @@ function Y(e, r, t, n) {
   if (r < t) {
     if (a = e.input.slice(r, t), n)
       for (i = 0, o = a.length; i < o; i += 1)
-        s = a.charCodeAt(i), s === 9 || 32 <= s && s <= 1114111 || b(e, "expected valid JSON character");
-    else Ji.test(a) && b(e, "the stream contains non-printable characters");
+        s = a.charCodeAt(i), s === 9 || 32 <= s && s <= 1114111 || g(e, "expected valid JSON character");
+    else Ji.test(a) && g(e, "the stream contains non-printable characters");
     e.result += a;
   }
 }
 function ft(e, r, t, n) {
   var i, o, s, a;
-  for (E.isObject(t) || b(e, "cannot merge mappings; the provided source object is unacceptable"), i = Object.keys(t), s = 0, a = i.length; s < a; s += 1)
+  for (E.isObject(t) || g(e, "cannot merge mappings; the provided source object is unacceptable"), i = Object.keys(t), s = 0, a = i.length; s < a; s += 1)
     o = i[s], W.call(r, o) || (r[o] = t[o], n[o] = !0);
 }
 function pe(e, r, t, n, i, o, s, a, l) {
   var c, d;
   if (Array.isArray(i))
     for (i = Array.prototype.slice.call(i), c = 0, d = i.length; c < d; c += 1)
-      Array.isArray(i[c]) && b(e, "nested arrays are not supported inside keys"), typeof i == "object" && pt(i[c]) === "[object Object]" && (i[c] = "[object Object]");
+      Array.isArray(i[c]) && g(e, "nested arrays are not supported inside keys"), typeof i == "object" && pt(i[c]) === "[object Object]" && (i[c] = "[object Object]");
   if (typeof i == "object" && pt(i) === "[object Object]" && (i = "[object Object]"), i = String(i), r === null && (r = {}), n === "tag:yaml.org,2002:merge")
     if (Array.isArray(o))
       for (c = 0, d = o.length; c < d; c += 1)
@@ -3615,7 +3619,7 @@ function pe(e, r, t, n, i, o, s, a, l) {
     else
       ft(e, r, o, t);
   else
-    !e.json && !W.call(t, i) && W.call(r, i) && (e.line = s || e.line, e.lineStart = a || e.lineStart, e.position = l || e.position, b(e, "duplicated mapping key")), i === "__proto__" ? Object.defineProperty(r, i, {
+    !e.json && !W.call(t, i) && W.call(r, i) && (e.line = s || e.line, e.lineStart = a || e.lineStart, e.position = l || e.position, g(e, "duplicated mapping key")), i === "__proto__" ? Object.defineProperty(r, i, {
       configurable: !0,
       enumerable: !0,
       writable: !0,
@@ -3625,7 +3629,7 @@ function pe(e, r, t, n, i, o, s, a, l) {
 }
 function rt(e) {
   var r;
-  r = e.input.charCodeAt(e.position), r === 10 ? e.position++ : r === 13 ? (e.position++, e.input.charCodeAt(e.position) === 10 && e.position++) : b(e, "a line break is expected"), e.line += 1, e.lineStart = e.position, e.firstTabInLine = -1;
+  r = e.input.charCodeAt(e.position), r === 10 ? e.position++ : r === 13 ? (e.position++, e.input.charCodeAt(e.position) === 10 && e.position++) : g(e, "a line break is expected"), e.line += 1, e.lineStart = e.position, e.firstTabInLine = -1;
 }
 function A(e, r, t) {
   for (var n = 0, i = e.input.charCodeAt(e.position); i !== 0; ) {
@@ -3635,13 +3639,13 @@ function A(e, r, t) {
       do
         i = e.input.charCodeAt(++e.position);
       while (i !== 10 && i !== 13 && i !== 0);
-    if (D(i))
+    if ($(i))
       for (rt(e), i = e.input.charCodeAt(e.position), n++, e.lineIndent = 0; i === 32; )
         e.lineIndent++, i = e.input.charCodeAt(++e.position);
     else
       break;
   }
-  return t !== -1 && n !== 0 && e.lineIndent < t && De(e, "deficient indentation"), n;
+  return t !== -1 && n !== 0 && e.lineIndent < t && $e(e, "deficient indentation"), n;
 }
 function qe(e) {
   var r = e.position, t;
@@ -3652,31 +3656,31 @@ function it(e, r) {
 `, r - 1));
 }
 function on(e, r, t) {
-  var n, i, o, s, a, l, c, d, u = e.kind, h = e.result, f;
-  if (f = e.input.charCodeAt(e.position), N(f) || ue(f) || f === 35 || f === 38 || f === 42 || f === 33 || f === 124 || f === 62 || f === 39 || f === 34 || f === 37 || f === 64 || f === 96 || (f === 63 || f === 45) && (i = e.input.charCodeAt(e.position + 1), N(i) || t && ue(i)))
+  var n, i, o, s, a, l, c, d, u = e.kind, f = e.result, h;
+  if (h = e.input.charCodeAt(e.position), N(h) || ue(h) || h === 35 || h === 38 || h === 42 || h === 33 || h === 124 || h === 62 || h === 39 || h === 34 || h === 37 || h === 64 || h === 96 || (h === 63 || h === 45) && (i = e.input.charCodeAt(e.position + 1), N(i) || t && ue(i)))
     return !1;
-  for (e.kind = "scalar", e.result = "", o = s = e.position, a = !1; f !== 0; ) {
-    if (f === 58) {
+  for (e.kind = "scalar", e.result = "", o = s = e.position, a = !1; h !== 0; ) {
+    if (h === 58) {
       if (i = e.input.charCodeAt(e.position + 1), N(i) || t && ue(i))
         break;
-    } else if (f === 35) {
+    } else if (h === 35) {
       if (n = e.input.charCodeAt(e.position - 1), N(n))
         break;
     } else {
-      if (e.position === e.lineStart && qe(e) || t && ue(f))
+      if (e.position === e.lineStart && qe(e) || t && ue(h))
         break;
-      if (D(f))
+      if ($(h))
         if (l = e.line, c = e.lineStart, d = e.lineIndent, A(e, !1, -1), e.lineIndent >= r) {
-          a = !0, f = e.input.charCodeAt(e.position);
+          a = !0, h = e.input.charCodeAt(e.position);
           continue;
         } else {
           e.position = s, e.line = l, e.lineStart = c, e.lineIndent = d;
           break;
         }
     }
-    a && (Y(e, o, s, !1), it(e, e.line - l), o = s = e.position, a = !1), se(f) || (s = e.position + 1), f = e.input.charCodeAt(++e.position);
+    a && (Y(e, o, s, !1), it(e, e.line - l), o = s = e.position, a = !1), se(h) || (s = e.position + 1), h = e.input.charCodeAt(++e.position);
   }
-  return Y(e, o, s, !1), e.result ? !0 : (e.kind = u, e.result = h, !1);
+  return Y(e, o, s, !1), e.result ? !0 : (e.kind = u, e.result = f, !1);
 }
 function sn(e, r) {
   var t, n, i;
@@ -3688,8 +3692,8 @@ function sn(e, r) {
         n = e.position, e.position++, i = e.position;
       else
         return !0;
-    else D(t) ? (Y(e, n, i, !0), it(e, A(e, !1, r)), n = i = e.position) : e.position === e.lineStart && qe(e) ? b(e, "unexpected end of the document within a single quoted scalar") : (e.position++, i = e.position);
-  b(e, "unexpected end of the stream within a single quoted scalar");
+    else $(t) ? (Y(e, n, i, !0), it(e, A(e, !1, r)), n = i = e.position) : e.position === e.lineStart && qe(e) ? g(e, "unexpected end of the document within a single quoted scalar") : (e.position++, i = e.position);
+  g(e, "unexpected end of the stream within a single quoted scalar");
 }
 function an(e, r) {
   var t, n, i, o, s, a;
@@ -3699,35 +3703,35 @@ function an(e, r) {
     if (a === 34)
       return Y(e, t, e.position, !0), e.position++, !0;
     if (a === 92) {
-      if (Y(e, t, e.position, !0), a = e.input.charCodeAt(++e.position), D(a))
+      if (Y(e, t, e.position, !0), a = e.input.charCodeAt(++e.position), $(a))
         A(e, !1, r);
-      else if (a < 256 && $t[a])
+      else if (a < 256 && Dt[a])
         e.result += Ht[a], e.position++;
       else if ((s = en(a)) > 0) {
         for (i = s, o = 0; i > 0; i--)
-          a = e.input.charCodeAt(++e.position), (s = Zi(a)) >= 0 ? o = (o << 4) + s : b(e, "expected hexadecimal character");
+          a = e.input.charCodeAt(++e.position), (s = Zi(a)) >= 0 ? o = (o << 4) + s : g(e, "expected hexadecimal character");
         e.result += rn(o), e.position++;
       } else
-        b(e, "unknown escape sequence");
+        g(e, "unknown escape sequence");
       t = n = e.position;
-    } else D(a) ? (Y(e, t, n, !0), it(e, A(e, !1, r)), t = n = e.position) : e.position === e.lineStart && qe(e) ? b(e, "unexpected end of the document within a double quoted scalar") : (e.position++, n = e.position);
+    } else $(a) ? (Y(e, t, n, !0), it(e, A(e, !1, r)), t = n = e.position) : e.position === e.lineStart && qe(e) ? g(e, "unexpected end of the document within a double quoted scalar") : (e.position++, n = e.position);
   }
-  b(e, "unexpected end of the stream within a double quoted scalar");
+  g(e, "unexpected end of the stream within a double quoted scalar");
 }
 function ln(e, r) {
-  var t = !0, n, i, o, s = e.tag, a, l = e.anchor, c, d, u, h, f, m = /* @__PURE__ */ Object.create(null), g, v, C, y;
+  var t = !0, n, i, o, s = e.tag, a, l = e.anchor, c, d, u, f, h, m = /* @__PURE__ */ Object.create(null), b, v, C, y;
   if (y = e.input.charCodeAt(e.position), y === 91)
-    d = 93, f = !1, a = [];
+    d = 93, h = !1, a = [];
   else if (y === 123)
-    d = 125, f = !0, a = {};
+    d = 125, h = !0, a = {};
   else
     return !1;
   for (e.anchor !== null && (e.anchorMap[e.anchor] = a), y = e.input.charCodeAt(++e.position); y !== 0; ) {
     if (A(e, !0, r), y = e.input.charCodeAt(e.position), y === d)
-      return e.position++, e.tag = s, e.anchor = l, e.kind = f ? "mapping" : "sequence", e.result = a, !0;
-    t ? y === 44 && b(e, "expected the node content, but found ','") : b(e, "missed comma between flow collection entries"), v = g = C = null, u = h = !1, y === 63 && (c = e.input.charCodeAt(e.position + 1), N(c) && (u = h = !0, e.position++, A(e, !0, r))), n = e.line, i = e.lineStart, o = e.position, ve(e, r, Ue, !1, !0), v = e.tag, g = e.result, A(e, !0, r), y = e.input.charCodeAt(e.position), (h || e.line === n) && y === 58 && (u = !0, y = e.input.charCodeAt(++e.position), A(e, !0, r), ve(e, r, Ue, !1, !0), C = e.result), f ? pe(e, a, m, v, g, C, n, i, o) : u ? a.push(pe(e, null, m, v, g, C, n, i, o)) : a.push(g), A(e, !0, r), y = e.input.charCodeAt(e.position), y === 44 ? (t = !0, y = e.input.charCodeAt(++e.position)) : t = !1;
+      return e.position++, e.tag = s, e.anchor = l, e.kind = h ? "mapping" : "sequence", e.result = a, !0;
+    t ? y === 44 && g(e, "expected the node content, but found ','") : g(e, "missed comma between flow collection entries"), v = b = C = null, u = f = !1, y === 63 && (c = e.input.charCodeAt(e.position + 1), N(c) && (u = f = !0, e.position++, A(e, !0, r))), n = e.line, i = e.lineStart, o = e.position, ve(e, r, Ue, !1, !0), v = e.tag, b = e.result, A(e, !0, r), y = e.input.charCodeAt(e.position), (f || e.line === n) && y === 58 && (u = !0, y = e.input.charCodeAt(++e.position), A(e, !0, r), ve(e, r, Ue, !1, !0), C = e.result), h ? pe(e, a, m, v, b, C, n, i, o) : u ? a.push(pe(e, null, m, v, b, C, n, i, o)) : a.push(b), A(e, !0, r), y = e.input.charCodeAt(e.position), y === 44 ? (t = !0, y = e.input.charCodeAt(++e.position)) : t = !1;
   }
-  b(e, "unexpected end of the stream within a flow collection");
+  g(e, "unexpected end of the stream within a flow collection");
 }
 function cn(e, r) {
   var t, n, i = Ke, o = !1, s = !1, a = r, l = 0, c = !1, d, u;
@@ -3739,9 +3743,9 @@ function cn(e, r) {
     return !1;
   for (e.kind = "scalar", e.result = ""; u !== 0; )
     if (u = e.input.charCodeAt(++e.position), u === 43 || u === 45)
-      Ke === i ? i = u === 43 ? ut : Ki : b(e, "repeat of a chomping mode identifier");
+      Ke === i ? i = u === 43 ? ut : Ki : g(e, "repeat of a chomping mode identifier");
     else if ((d = tn(u)) >= 0)
-      d === 0 ? b(e, "bad explicit indentation width of a block scalar; it cannot be less than one") : s ? b(e, "repeat of an indentation width identifier") : (a = r + d - 1, s = !0);
+      d === 0 ? g(e, "bad explicit indentation width of a block scalar; it cannot be less than one") : s ? g(e, "repeat of an indentation width identifier") : (a = r + d - 1, s = !0);
     else
       break;
   if (se(u)) {
@@ -3751,12 +3755,12 @@ function cn(e, r) {
     if (u === 35)
       do
         u = e.input.charCodeAt(++e.position);
-      while (!D(u) && u !== 0);
+      while (!$(u) && u !== 0);
   }
   for (; u !== 0; ) {
     for (rt(e), e.lineIndent = 0, u = e.input.charCodeAt(e.position); (!s || e.lineIndent < a) && u === 32; )
       e.lineIndent++, u = e.input.charCodeAt(++e.position);
-    if (!s && e.lineIndent > a && (a = e.lineIndent), D(u)) {
+    if (!s && e.lineIndent > a && (a = e.lineIndent), $(u)) {
       l++;
       continue;
     }
@@ -3770,7 +3774,7 @@ function cn(e, r) {
 `, o ? 1 + l : l)) : c ? (c = !1, e.result += E.repeat(`
 `, l + 1)) : l === 0 ? o && (e.result += " ") : e.result += E.repeat(`
 `, l) : e.result += E.repeat(`
-`, o ? 1 + l : l), o = !0, s = !0, l = 0, t = e.position; !D(u) && u !== 0; )
+`, o ? 1 + l : l), o = !0, s = !0, l = 0, t = e.position; !$(u) && u !== 0; )
       u = e.input.charCodeAt(++e.position);
     Y(e, t, e.position, !1);
   }
@@ -3779,24 +3783,24 @@ function cn(e, r) {
 function mt(e, r) {
   var t, n = e.tag, i = e.anchor, o = [], s, a = !1, l;
   if (e.firstTabInLine !== -1) return !1;
-  for (e.anchor !== null && (e.anchorMap[e.anchor] = o), l = e.input.charCodeAt(e.position); l !== 0 && (e.firstTabInLine !== -1 && (e.position = e.firstTabInLine, b(e, "tab characters must not be used in indentation")), !(l !== 45 || (s = e.input.charCodeAt(e.position + 1), !N(s)))); ) {
+  for (e.anchor !== null && (e.anchorMap[e.anchor] = o), l = e.input.charCodeAt(e.position); l !== 0 && (e.firstTabInLine !== -1 && (e.position = e.firstTabInLine, g(e, "tab characters must not be used in indentation")), !(l !== 45 || (s = e.input.charCodeAt(e.position + 1), !N(s)))); ) {
     if (a = !0, e.position++, A(e, !0, -1) && e.lineIndent <= r) {
       o.push(null), l = e.input.charCodeAt(e.position);
       continue;
     }
     if (t = e.line, ve(e, r, Ut, !1, !0), o.push(e.result), A(e, !0, -1), l = e.input.charCodeAt(e.position), (e.line === t || e.lineIndent > r) && l !== 0)
-      b(e, "bad indentation of a sequence entry");
+      g(e, "bad indentation of a sequence entry");
     else if (e.lineIndent < r)
       break;
   }
   return a ? (e.tag = n, e.anchor = i, e.kind = "sequence", e.result = o, !0) : !1;
 }
 function un(e, r, t) {
-  var n, i, o, s, a, l, c = e.tag, d = e.anchor, u = {}, h = /* @__PURE__ */ Object.create(null), f = null, m = null, g = null, v = !1, C = !1, y;
+  var n, i, o, s, a, l, c = e.tag, d = e.anchor, u = {}, f = /* @__PURE__ */ Object.create(null), h = null, m = null, b = null, v = !1, C = !1, y;
   if (e.firstTabInLine !== -1) return !1;
   for (e.anchor !== null && (e.anchorMap[e.anchor] = u), y = e.input.charCodeAt(e.position); y !== 0; ) {
-    if (!v && e.firstTabInLine !== -1 && (e.position = e.firstTabInLine, b(e, "tab characters must not be used in indentation")), n = e.input.charCodeAt(e.position + 1), o = e.line, (y === 63 || y === 58) && N(n))
-      y === 63 ? (v && (pe(e, u, h, f, m, null, s, a, l), f = m = g = null), C = !0, v = !0, i = !0) : v ? (v = !1, i = !0) : b(e, "incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line"), e.position += 1, y = n;
+    if (!v && e.firstTabInLine !== -1 && (e.position = e.firstTabInLine, g(e, "tab characters must not be used in indentation")), n = e.input.charCodeAt(e.position + 1), o = e.line, (y === 63 || y === 58) && N(n))
+      y === 63 ? (v && (pe(e, u, f, h, m, null, s, a, l), h = m = b = null), C = !0, v = !0, i = !0) : v ? (v = !1, i = !0) : g(e, "incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line"), e.position += 1, y = n;
     else {
       if (s = e.line, a = e.lineStart, l = e.position, !ve(e, t, Ft, !1, !0))
         break;
@@ -3804,67 +3808,67 @@ function un(e, r, t) {
         for (y = e.input.charCodeAt(e.position); se(y); )
           y = e.input.charCodeAt(++e.position);
         if (y === 58)
-          y = e.input.charCodeAt(++e.position), N(y) || b(e, "a whitespace character is expected after the key-value separator within a block mapping"), v && (pe(e, u, h, f, m, null, s, a, l), f = m = g = null), C = !0, v = !1, i = !1, f = e.tag, m = e.result;
+          y = e.input.charCodeAt(++e.position), N(y) || g(e, "a whitespace character is expected after the key-value separator within a block mapping"), v && (pe(e, u, f, h, m, null, s, a, l), h = m = b = null), C = !0, v = !1, i = !1, h = e.tag, m = e.result;
         else if (C)
-          b(e, "can not read an implicit mapping pair; a colon is missed");
+          g(e, "can not read an implicit mapping pair; a colon is missed");
         else
           return e.tag = c, e.anchor = d, !0;
       } else if (C)
-        b(e, "can not read a block mapping entry; a multiline key may not be an implicit key");
+        g(e, "can not read a block mapping entry; a multiline key may not be an implicit key");
       else
         return e.tag = c, e.anchor = d, !0;
     }
-    if ((e.line === o || e.lineIndent > r) && (v && (s = e.line, a = e.lineStart, l = e.position), ve(e, r, Me, !0, i) && (v ? m = e.result : g = e.result), v || (pe(e, u, h, f, m, g, s, a, l), f = m = g = null), A(e, !0, -1), y = e.input.charCodeAt(e.position)), (e.line === o || e.lineIndent > r) && y !== 0)
-      b(e, "bad indentation of a mapping entry");
+    if ((e.line === o || e.lineIndent > r) && (v && (s = e.line, a = e.lineStart, l = e.position), ve(e, r, Me, !0, i) && (v ? m = e.result : b = e.result), v || (pe(e, u, f, h, m, b, s, a, l), h = m = b = null), A(e, !0, -1), y = e.input.charCodeAt(e.position)), (e.line === o || e.lineIndent > r) && y !== 0)
+      g(e, "bad indentation of a mapping entry");
     else if (e.lineIndent < r)
       break;
   }
-  return v && pe(e, u, h, f, m, null, s, a, l), C && (e.tag = c, e.anchor = d, e.kind = "mapping", e.result = u), C;
+  return v && pe(e, u, f, h, m, null, s, a, l), C && (e.tag = c, e.anchor = d, e.kind = "mapping", e.result = u), C;
 }
 function pn(e) {
   var r, t = !1, n = !1, i, o, s;
   if (s = e.input.charCodeAt(e.position), s !== 33) return !1;
-  if (e.tag !== null && b(e, "duplication of a tag property"), s = e.input.charCodeAt(++e.position), s === 60 ? (t = !0, s = e.input.charCodeAt(++e.position)) : s === 33 ? (n = !0, i = "!!", s = e.input.charCodeAt(++e.position)) : i = "!", r = e.position, t) {
+  if (e.tag !== null && g(e, "duplication of a tag property"), s = e.input.charCodeAt(++e.position), s === 60 ? (t = !0, s = e.input.charCodeAt(++e.position)) : s === 33 ? (n = !0, i = "!!", s = e.input.charCodeAt(++e.position)) : i = "!", r = e.position, t) {
     do
       s = e.input.charCodeAt(++e.position);
     while (s !== 0 && s !== 62);
-    e.position < e.length ? (o = e.input.slice(r, e.position), s = e.input.charCodeAt(++e.position)) : b(e, "unexpected end of the stream within a verbatim tag");
+    e.position < e.length ? (o = e.input.slice(r, e.position), s = e.input.charCodeAt(++e.position)) : g(e, "unexpected end of the stream within a verbatim tag");
   } else {
     for (; s !== 0 && !N(s); )
-      s === 33 && (n ? b(e, "tag suffix cannot contain exclamation marks") : (i = e.input.slice(r - 1, e.position + 1), Mt.test(i) || b(e, "named tag handle cannot contain such characters"), n = !0, r = e.position + 1)), s = e.input.charCodeAt(++e.position);
-    o = e.input.slice(r, e.position), Xi.test(o) && b(e, "tag suffix cannot contain flow indicator characters");
+      s === 33 && (n ? g(e, "tag suffix cannot contain exclamation marks") : (i = e.input.slice(r - 1, e.position + 1), Mt.test(i) || g(e, "named tag handle cannot contain such characters"), n = !0, r = e.position + 1)), s = e.input.charCodeAt(++e.position);
+    o = e.input.slice(r, e.position), Xi.test(o) && g(e, "tag suffix cannot contain flow indicator characters");
   }
-  o && !Dt.test(o) && b(e, "tag name cannot contain such characters: " + o);
+  o && !$t.test(o) && g(e, "tag name cannot contain such characters: " + o);
   try {
     o = decodeURIComponent(o);
   } catch {
-    b(e, "tag name is malformed: " + o);
+    g(e, "tag name is malformed: " + o);
   }
-  return t ? e.tag = o : W.call(e.tagMap, i) ? e.tag = e.tagMap[i] + o : i === "!" ? e.tag = "!" + o : i === "!!" ? e.tag = "tag:yaml.org,2002:" + o : b(e, 'undeclared tag handle "' + i + '"'), !0;
+  return t ? e.tag = o : W.call(e.tagMap, i) ? e.tag = e.tagMap[i] + o : i === "!" ? e.tag = "!" + o : i === "!!" ? e.tag = "tag:yaml.org,2002:" + o : g(e, 'undeclared tag handle "' + i + '"'), !0;
 }
 function dn(e) {
   var r, t;
   if (t = e.input.charCodeAt(e.position), t !== 38) return !1;
-  for (e.anchor !== null && b(e, "duplication of an anchor property"), t = e.input.charCodeAt(++e.position), r = e.position; t !== 0 && !N(t) && !ue(t); )
+  for (e.anchor !== null && g(e, "duplication of an anchor property"), t = e.input.charCodeAt(++e.position), r = e.position; t !== 0 && !N(t) && !ue(t); )
     t = e.input.charCodeAt(++e.position);
-  return e.position === r && b(e, "name of an anchor node must contain at least one character"), e.anchor = e.input.slice(r, e.position), !0;
+  return e.position === r && g(e, "name of an anchor node must contain at least one character"), e.anchor = e.input.slice(r, e.position), !0;
 }
 function hn(e) {
   var r, t, n;
   if (n = e.input.charCodeAt(e.position), n !== 42) return !1;
   for (n = e.input.charCodeAt(++e.position), r = e.position; n !== 0 && !N(n) && !ue(n); )
     n = e.input.charCodeAt(++e.position);
-  return e.position === r && b(e, "name of an alias node must contain at least one character"), t = e.input.slice(r, e.position), W.call(e.anchorMap, t) || b(e, 'unidentified alias "' + t + '"'), e.result = e.anchorMap[t], A(e, !0, -1), !0;
+  return e.position === r && g(e, "name of an alias node must contain at least one character"), t = e.input.slice(r, e.position), W.call(e.anchorMap, t) || g(e, 'unidentified alias "' + t + '"'), e.result = e.anchorMap[t], A(e, !0, -1), !0;
 }
 function ve(e, r, t, n, i) {
-  var o, s, a, l = 1, c = !1, d = !1, u, h, f, m, g, v;
+  var o, s, a, l = 1, c = !1, d = !1, u, f, h, m, b, v;
   if (e.listener !== null && e.listener("open", e), e.tag = null, e.anchor = null, e.kind = null, e.result = null, o = s = a = Me === t || Ut === t, n && A(e, !0, -1) && (c = !0, e.lineIndent > r ? l = 1 : e.lineIndent === r ? l = 0 : e.lineIndent < r && (l = -1)), l === 1)
     for (; pn(e) || dn(e); )
       A(e, !0, -1) ? (c = !0, a = o, e.lineIndent > r ? l = 1 : e.lineIndent === r ? l = 0 : e.lineIndent < r && (l = -1)) : a = !1;
-  if (a && (a = c || i), (l === 1 || Me === t) && (Ue === t || Ft === t ? g = r : g = r + 1, v = e.position - e.lineStart, l === 1 ? a && (mt(e, v) || un(e, v, g)) || ln(e, g) ? d = !0 : (s && cn(e, g) || sn(e, g) || an(e, g) ? d = !0 : hn(e) ? (d = !0, (e.tag !== null || e.anchor !== null) && b(e, "alias node should not have any properties")) : on(e, g, Ue === t) && (d = !0, e.tag === null && (e.tag = "?")), e.anchor !== null && (e.anchorMap[e.anchor] = e.result)) : l === 0 && (d = a && mt(e, v))), e.tag === null)
+  if (a && (a = c || i), (l === 1 || Me === t) && (Ue === t || Ft === t ? b = r : b = r + 1, v = e.position - e.lineStart, l === 1 ? a && (mt(e, v) || un(e, v, b)) || ln(e, b) ? d = !0 : (s && cn(e, b) || sn(e, b) || an(e, b) ? d = !0 : hn(e) ? (d = !0, (e.tag !== null || e.anchor !== null) && g(e, "alias node should not have any properties")) : on(e, b, Ue === t) && (d = !0, e.tag === null && (e.tag = "?")), e.anchor !== null && (e.anchorMap[e.anchor] = e.result)) : l === 0 && (d = a && mt(e, v))), e.tag === null)
     e.anchor !== null && (e.anchorMap[e.anchor] = e.result);
   else if (e.tag === "?") {
-    for (e.result !== null && e.kind !== "scalar" && b(e, 'unacceptable node kind for !<?> tag; it should be "scalar", not "' + e.kind + '"'), u = 0, h = e.implicitTypes.length; u < h; u += 1)
+    for (e.result !== null && e.kind !== "scalar" && g(e, 'unacceptable node kind for !<?> tag; it should be "scalar", not "' + e.kind + '"'), u = 0, f = e.implicitTypes.length; u < f; u += 1)
       if (m = e.implicitTypes[u], m.resolve(e.result)) {
         e.result = m.construct(e.result), e.tag = m.tag, e.anchor !== null && (e.anchorMap[e.anchor] = e.result);
         break;
@@ -3873,12 +3877,12 @@ function ve(e, r, t, n, i) {
     if (W.call(e.typeMap[e.kind || "fallback"], e.tag))
       m = e.typeMap[e.kind || "fallback"][e.tag];
     else
-      for (m = null, f = e.typeMap.multi[e.kind || "fallback"], u = 0, h = f.length; u < h; u += 1)
-        if (e.tag.slice(0, f[u].tag.length) === f[u].tag) {
-          m = f[u];
+      for (m = null, h = e.typeMap.multi[e.kind || "fallback"], u = 0, f = h.length; u < f; u += 1)
+        if (e.tag.slice(0, h[u].tag.length) === h[u].tag) {
+          m = h[u];
           break;
         }
-    m || b(e, "unknown tag !<" + e.tag + ">"), e.result !== null && m.kind !== e.kind && b(e, "unacceptable node kind for !<" + e.tag + '> tag; it should be "' + m.kind + '", not "' + e.kind + '"'), m.resolve(e.result, e.tag) ? (e.result = m.construct(e.result, e.tag), e.anchor !== null && (e.anchorMap[e.anchor] = e.result)) : b(e, "cannot resolve a node with !<" + e.tag + "> explicit tag");
+    m || g(e, "unknown tag !<" + e.tag + ">"), e.result !== null && m.kind !== e.kind && g(e, "unacceptable node kind for !<" + e.tag + '> tag; it should be "' + m.kind + '", not "' + e.kind + '"'), m.resolve(e.result, e.tag) ? (e.result = m.construct(e.result, e.tag), e.anchor !== null && (e.anchorMap[e.anchor] = e.result)) : g(e, "cannot resolve a node with !<" + e.tag + "> explicit tag");
   }
   return e.listener !== null && e.listener("close", e), e.tag !== null || e.anchor !== null || d;
 }
@@ -3887,28 +3891,28 @@ function fn(e) {
   for (e.version = null, e.checkLineBreaks = e.legacy, e.tagMap = /* @__PURE__ */ Object.create(null), e.anchorMap = /* @__PURE__ */ Object.create(null); (s = e.input.charCodeAt(e.position)) !== 0 && (A(e, !0, -1), s = e.input.charCodeAt(e.position), !(e.lineIndent > 0 || s !== 37)); ) {
     for (o = !0, s = e.input.charCodeAt(++e.position), t = e.position; s !== 0 && !N(s); )
       s = e.input.charCodeAt(++e.position);
-    for (n = e.input.slice(t, e.position), i = [], n.length < 1 && b(e, "directive name must not be less than one character in length"); s !== 0; ) {
+    for (n = e.input.slice(t, e.position), i = [], n.length < 1 && g(e, "directive name must not be less than one character in length"); s !== 0; ) {
       for (; se(s); )
         s = e.input.charCodeAt(++e.position);
       if (s === 35) {
         do
           s = e.input.charCodeAt(++e.position);
-        while (s !== 0 && !D(s));
+        while (s !== 0 && !$(s));
         break;
       }
-      if (D(s)) break;
+      if ($(s)) break;
       for (t = e.position; s !== 0 && !N(s); )
         s = e.input.charCodeAt(++e.position);
       i.push(e.input.slice(t, e.position));
     }
-    s !== 0 && rt(e), W.call(ht, n) ? ht[n](e, n, i) : De(e, 'unknown document directive "' + n + '"');
+    s !== 0 && rt(e), W.call(ht, n) ? ht[n](e, n, i) : $e(e, 'unknown document directive "' + n + '"');
   }
-  if (A(e, !0, -1), e.lineIndent === 0 && e.input.charCodeAt(e.position) === 45 && e.input.charCodeAt(e.position + 1) === 45 && e.input.charCodeAt(e.position + 2) === 45 ? (e.position += 3, A(e, !0, -1)) : o && b(e, "directives end mark is expected"), ve(e, e.lineIndent - 1, Me, !1, !0), A(e, !0, -1), e.checkLineBreaks && Qi.test(e.input.slice(r, e.position)) && De(e, "non-ASCII line breaks are interpreted as content"), e.documents.push(e.result), e.position === e.lineStart && qe(e)) {
+  if (A(e, !0, -1), e.lineIndent === 0 && e.input.charCodeAt(e.position) === 45 && e.input.charCodeAt(e.position + 1) === 45 && e.input.charCodeAt(e.position + 2) === 45 ? (e.position += 3, A(e, !0, -1)) : o && g(e, "directives end mark is expected"), ve(e, e.lineIndent - 1, Me, !1, !0), A(e, !0, -1), e.checkLineBreaks && Qi.test(e.input.slice(r, e.position)) && $e(e, "non-ASCII line breaks are interpreted as content"), e.documents.push(e.result), e.position === e.lineStart && qe(e)) {
     e.input.charCodeAt(e.position) === 46 && (e.position += 3, A(e, !0, -1));
     return;
   }
   if (e.position < e.length - 1)
-    b(e, "end of the stream or a document separator is expected");
+    g(e, "end of the stream or a document separator is expected");
   else
     return;
 }
@@ -3916,7 +3920,7 @@ function mn(e, r) {
   e = String(e), r = r || {}, e.length !== 0 && (e.charCodeAt(e.length - 1) !== 10 && e.charCodeAt(e.length - 1) !== 13 && (e += `
 `), e.charCodeAt(0) === 65279 && (e = e.slice(1)));
   var t = new nn(e, r), n = e.indexOf("\0");
-  for (n !== -1 && (t.position = n, b(t, "null byte is not allowed in input")), t.input += "\0"; t.input.charCodeAt(t.position) === 32; )
+  for (n !== -1 && (t.position = n, g(t, "null byte is not allowed in input")), t.input += "\0"; t.input.charCodeAt(t.position) === 32; )
     t.lineIndent += 1, t.position += 1;
   for (; t.position < t.length - 1; )
     fn(t);
@@ -3932,7 +3936,7 @@ function bn(e, r) {
 }
 var gn = bn, vn = {
   load: gn
-}, Bt = Object.prototype.toString, Vt = Object.prototype.hasOwnProperty, nt = 65279, wn = 9, ye = 10, xn = 13, yn = 32, Cn = 33, _n = 34, Qe = 35, Sn = 37, kn = 38, An = 39, En = 42, qt = 44, Ln = 45, $e = 58, On = 61, Rn = 62, Tn = 63, Nn = 64, zt = 91, Yt = 93, In = 96, Wt = 123, Pn = 124, Gt = 125, O = {};
+}, Bt = Object.prototype.toString, Vt = Object.prototype.hasOwnProperty, nt = 65279, wn = 9, ye = 10, xn = 13, yn = 32, Cn = 33, _n = 34, Qe = 35, Sn = 37, kn = 38, An = 39, En = 42, qt = 44, Ln = 45, De = 58, On = 61, Rn = 62, Tn = 63, Nn = 64, zt = 91, Yt = 93, In = 96, Wt = 123, Pn = 124, Gt = 125, O = {};
 O[0] = "\\0";
 O[7] = "\\a";
 O[8] = "\\b";
@@ -3973,7 +3977,7 @@ function Mn(e, r) {
     s = n[i], a = String(r[s]), s.slice(0, 2) === "!!" && (s = "tag:yaml.org,2002:" + s.slice(2)), l = e.compiledTypeMap.fallback[s], l && Vt.call(l.styleAliases, a) && (a = l.styleAliases[a]), t[s] = a;
   return t;
 }
-function Dn(e) {
+function $n(e) {
   var r, t, n;
   if (r = e.toString(16).toUpperCase(), e <= 255)
     t = "x", n = 2;
@@ -3985,9 +3989,9 @@ function Dn(e) {
     throw new T("code point within a string may not be greater than 0xFFFFFFFF");
   return "\\" + t + E.repeat("0", n - r.length) + r;
 }
-var $n = 1, Ce = 2;
+var Dn = 1, Ce = 2;
 function Hn(e) {
-  this.schema = e.schema || Pt, this.indent = Math.max(1, e.indent || 2), this.noArrayIndent = e.noArrayIndent || !1, this.skipInvalid = e.skipInvalid || !1, this.flowLevel = E.isNothing(e.flowLevel) ? -1 : e.flowLevel, this.styleMap = Mn(this.schema, e.styles || null), this.sortKeys = e.sortKeys || !1, this.lineWidth = e.lineWidth || 80, this.noRefs = e.noRefs || !1, this.noCompatMode = e.noCompatMode || !1, this.condenseFlow = e.condenseFlow || !1, this.quotingType = e.quotingType === '"' ? Ce : $n, this.forceQuotes = e.forceQuotes || !1, this.replacer = typeof e.replacer == "function" ? e.replacer : null, this.implicitTypes = this.schema.compiledImplicit, this.explicitTypes = this.schema.compiledExplicit, this.tag = null, this.result = "", this.duplicates = [], this.usedDuplicates = null;
+  this.schema = e.schema || Pt, this.indent = Math.max(1, e.indent || 2), this.noArrayIndent = e.noArrayIndent || !1, this.skipInvalid = e.skipInvalid || !1, this.flowLevel = E.isNothing(e.flowLevel) ? -1 : e.flowLevel, this.styleMap = Mn(this.schema, e.styles || null), this.sortKeys = e.sortKeys || !1, this.lineWidth = e.lineWidth || 80, this.noRefs = e.noRefs || !1, this.noCompatMode = e.noCompatMode || !1, this.condenseFlow = e.condenseFlow || !1, this.quotingType = e.quotingType === '"' ? Ce : Dn, this.forceQuotes = e.forceQuotes || !1, this.replacer = typeof e.replacer == "function" ? e.replacer : null, this.implicitTypes = this.schema.compiledImplicit, this.explicitTypes = this.schema.compiledExplicit, this.tag = null, this.result = "", this.duplicates = [], this.usedDuplicates = null;
 }
 function bt(e, r) {
   for (var t = E.repeat(" ", r), n = 0, i = -1, o = "", s, a = e.length; n < a; )
@@ -4023,14 +4027,14 @@ function vt(e, r, t) {
     (t ? (
       // c = flow-in
       n
-    ) : n && e !== qt && e !== zt && e !== Yt && e !== Wt && e !== Gt) && e !== Qe && !(r === $e && !i) || gt(r) && !He(r) && e === Qe || r === $e && i
+    ) : n && e !== qt && e !== zt && e !== Yt && e !== Wt && e !== Gt) && e !== Qe && !(r === De && !i) || gt(r) && !He(r) && e === Qe || r === De && i
   );
 }
 function Bn(e) {
-  return _e(e) && e !== nt && !He(e) && e !== Ln && e !== Tn && e !== $e && e !== qt && e !== zt && e !== Yt && e !== Wt && e !== Gt && e !== Qe && e !== kn && e !== En && e !== Cn && e !== Pn && e !== On && e !== Rn && e !== An && e !== _n && e !== Sn && e !== Nn && e !== In;
+  return _e(e) && e !== nt && !He(e) && e !== Ln && e !== Tn && e !== De && e !== qt && e !== zt && e !== Yt && e !== Wt && e !== Gt && e !== Qe && e !== kn && e !== En && e !== Cn && e !== Pn && e !== On && e !== Rn && e !== An && e !== _n && e !== Sn && e !== Nn && e !== In;
 }
 function Vn(e) {
-  return !He(e) && e !== $e;
+  return !He(e) && e !== De;
 }
 function we(e, r) {
   var t = e.charCodeAt(r), n;
@@ -4042,25 +4046,25 @@ function Kt(e) {
 }
 var Jt = 1, Ze = 2, Qt = 3, Xt = 4, ce = 5;
 function qn(e, r, t, n, i, o, s, a) {
-  var l, c = 0, d = null, u = !1, h = !1, f = n !== -1, m = -1, g = Bn(we(e, 0)) && Vn(we(e, e.length - 1));
+  var l, c = 0, d = null, u = !1, f = !1, h = n !== -1, m = -1, b = Bn(we(e, 0)) && Vn(we(e, e.length - 1));
   if (r || s)
     for (l = 0; l < e.length; c >= 65536 ? l += 2 : l++) {
       if (c = we(e, l), !_e(c))
         return ce;
-      g = g && vt(c, d, a), d = c;
+      b = b && vt(c, d, a), d = c;
     }
   else {
     for (l = 0; l < e.length; c >= 65536 ? l += 2 : l++) {
       if (c = we(e, l), c === ye)
-        u = !0, f && (h = h || // Foldable line = too long, and not more-indented.
+        u = !0, h && (f = f || // Foldable line = too long, and not more-indented.
         l - m - 1 > n && e[m + 1] !== " ", m = l);
       else if (!_e(c))
         return ce;
-      g = g && vt(c, d, a), d = c;
+      b = b && vt(c, d, a), d = c;
     }
-    h = h || f && l - m - 1 > n && e[m + 1] !== " ";
+    f = f || h && l - m - 1 > n && e[m + 1] !== " ";
   }
-  return !u && !h ? g && !s && !i(e) ? Jt : o === Ce ? ce : Ze : t > 9 && Kt(e) ? ce : s ? o === Ce ? ce : Ze : h ? Xt : Qt;
+  return !u && !f ? b && !s && !i(e) ? Jt : o === Ce ? ce : Ze : t > 9 && Kt(e) ? ce : s ? o === Ce ? ce : Ze : f ? Xt : Qt;
 }
 function zn(e, r, t, n, i) {
   e.dump = function() {
@@ -4133,7 +4137,7 @@ function yt(e, r) {
 }
 function Wn(e) {
   for (var r = "", t = 0, n, i = 0; i < e.length; t >= 65536 ? i += 2 : i++)
-    t = we(e, i), n = O[t], !n && _e(t) ? (r += e[i], t >= 65536 && (r += e[i + 1])) : r += n || Dn(t);
+    t = we(e, i), n = O[t], !n && _e(t) ? (r += e[i], t >= 65536 && (r += e[i + 1])) : r += n || $n(t);
   return r;
 }
 function Gn(e, r, t) {
@@ -4155,7 +4159,7 @@ function Kn(e, r, t) {
   e.tag = i, e.dump = "{" + n + "}";
 }
 function Jn(e, r, t, n) {
-  var i = "", o = e.tag, s = Object.keys(t), a, l, c, d, u, h;
+  var i = "", o = e.tag, s = Object.keys(t), a, l, c, d, u, f;
   if (e.sortKeys === !0)
     s.sort();
   else if (typeof e.sortKeys == "function")
@@ -4163,7 +4167,7 @@ function Jn(e, r, t, n) {
   else if (e.sortKeys)
     throw new T("sortKeys must be a boolean or a function");
   for (a = 0, l = s.length; a < l; a += 1)
-    h = "", (!n || i !== "") && (h += Xe(e, r)), c = s[a], d = t[c], e.replacer && (d = e.replacer.call(t, c, d)), j(e, r + 1, c, !0, !0, !0) && (u = e.tag !== null && e.tag !== "?" || e.dump && e.dump.length > 1024, u && (e.dump && ye === e.dump.charCodeAt(0) ? h += "?" : h += "? "), h += e.dump, u && (h += Xe(e, r)), j(e, r + 1, d, !0, u) && (e.dump && ye === e.dump.charCodeAt(0) ? h += ":" : h += ": ", h += e.dump, i += h));
+    f = "", (!n || i !== "") && (f += Xe(e, r)), c = s[a], d = t[c], e.replacer && (d = e.replacer.call(t, c, d)), j(e, r + 1, c, !0, !0, !0) && (u = e.tag !== null && e.tag !== "?" || e.dump && e.dump.length > 1024, u && (e.dump && ye === e.dump.charCodeAt(0) ? f += "?" : f += "? "), f += e.dump, u && (f += Xe(e, r)), j(e, r + 1, d, !0, u) && (e.dump && ye === e.dump.charCodeAt(0) ? f += ":" : f += ": ", f += e.dump, i += f));
   e.tag = o, e.dump = i || "{}";
 }
 function _t(e, r, t) {
@@ -4187,14 +4191,14 @@ function j(e, r, t, n, i, o, s) {
   e.tag = null, e.dump = t, _t(e, t, !1) || _t(e, t, !0);
   var a = Bt.call(e.dump), l = n, c;
   n && (n = e.flowLevel < 0 || e.flowLevel > r);
-  var d = a === "[object Object]" || a === "[object Array]", u, h;
-  if (d && (u = e.duplicates.indexOf(t), h = u !== -1), (e.tag !== null && e.tag !== "?" || h || e.indent !== 2 && r > 0) && (i = !1), h && e.usedDuplicates[u])
+  var d = a === "[object Object]" || a === "[object Array]", u, f;
+  if (d && (u = e.duplicates.indexOf(t), f = u !== -1), (e.tag !== null && e.tag !== "?" || f || e.indent !== 2 && r > 0) && (i = !1), f && e.usedDuplicates[u])
     e.dump = "*ref_" + u;
   else {
-    if (d && h && !e.usedDuplicates[u] && (e.usedDuplicates[u] = !0), a === "[object Object]")
-      n && Object.keys(e.dump).length !== 0 ? (Jn(e, r, e.dump, i), h && (e.dump = "&ref_" + u + e.dump)) : (Kn(e, r, e.dump), h && (e.dump = "&ref_" + u + " " + e.dump));
+    if (d && f && !e.usedDuplicates[u] && (e.usedDuplicates[u] = !0), a === "[object Object]")
+      n && Object.keys(e.dump).length !== 0 ? (Jn(e, r, e.dump, i), f && (e.dump = "&ref_" + u + e.dump)) : (Kn(e, r, e.dump), f && (e.dump = "&ref_" + u + " " + e.dump));
     else if (a === "[object Array]")
-      n && e.dump.length !== 0 ? (e.noArrayIndent && !s && r > 0 ? Ct(e, r - 1, e.dump, i) : Ct(e, r, e.dump, i), h && (e.dump = "&ref_" + u + e.dump)) : (Gn(e, r, e.dump), h && (e.dump = "&ref_" + u + " " + e.dump));
+      n && e.dump.length !== 0 ? (e.noArrayIndent && !s && r > 0 ? Ct(e, r - 1, e.dump, i) : Ct(e, r, e.dump, i), f && (e.dump = "&ref_" + u + e.dump)) : (Gn(e, r, e.dump), f && (e.dump = "&ref_" + u + " " + e.dump));
     else if (a === "[object String]")
       e.tag !== "?" && zn(e, e.dump, r, o, l);
     else {
@@ -4321,10 +4325,10 @@ async function ot(e, r = {}) {
       if (t.retries > 0 && n <= t.retries && (typeof t.retryOn == "function" ? t.retryOn(c) : t.retryOn.includes(c.status))) {
         const u = At(n, t);
         if (t.onRetry && await t.onRetry(n, u), t.onError) {
-          const h = new Fe(`请求失败，状态码 ${d.status}`, d.status, c, n);
-          await t.onError(h, n);
+          const f = new Fe(`请求失败，状态码 ${d.status}`, d.status, c, n);
+          await t.onError(f, n);
         }
-        return await new Promise((h) => setTimeout(h, u)), i();
+        return await new Promise((f) => setTimeout(f, u)), i();
       }
       return d;
     } catch (o) {
@@ -4363,8 +4367,8 @@ function oo(e, r) {
 }
 class so {
   constructor(r = []) {
-    k(this, "existVps", []);
-    k(this, "existVpsMap", /* @__PURE__ */ new Map());
+    S(this, "existVps", []);
+    S(this, "existVpsMap", /* @__PURE__ */ new Map());
     this.existVps = r, this.updateExist(this.existVps);
   }
   updateExist(r = []) {
@@ -4498,7 +4502,7 @@ const I = class I {
   }
 };
 K = new WeakMap(), J = new WeakMap(), x(I, K, "^LINK_TO^"), x(I, J, /* @__PURE__ */ new Map());
-let S = I;
+let k = I;
 var Q, Ee, B, P, X, de;
 class er extends Ne {
   constructor(t) {
@@ -4536,15 +4540,28 @@ class er extends Ne {
    * @param {string} v
    */
   setConfuseConfig(t) {
-    w(this, P, new URL(t)), p(this, P).username = this.getUsername(), p(this, P).host = this.getHost(), p(this, P).hostname = this.getHostName(), p(this, P).port = this.getPort(), p(this, P).hash = S.setPs(p(this, X), p(this, de)), w(this, Ee, p(this, P).href);
+    w(this, P, new URL(t)), p(this, P).username = this.getUsername(), p(this, P).host = this.getHost(), p(this, P).hostname = this.getHostName(), p(this, P).port = this.getPort(), p(this, P).hash = k.setPs(p(this, X), p(this, de)), w(this, Ee, p(this, P).href);
   }
   restoreClash(t, n) {
-    var i, o, s, a, l, c, d, u, h;
-    return t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(this.originConfig.port ?? 0), t.type === "hysteria2" && z(t, "password") && (t.password = ((o = (i = this.originConfig) == null ? void 0 : i.searchParams) == null ? void 0 : o.get("password")) ?? ""), z(t, "down") && (t.down = t.down !== "" ? t.down : ((s = this.originConfig.searchParams) == null ? void 0 : s.get("down")) ?? ((a = this.originConfig.searchParams) == null ? void 0 : a.get("downmbps")) ?? 0), z(t, "up") && (t.up = t.up !== "" ? t.up : ((l = this.originConfig.searchParams) == null ? void 0 : l.get("up")) ?? ((c = this.originConfig.searchParams) == null ? void 0 : c.get("upmbps")) ?? 0), z(t, "delay") && (t.delay = ((d = this.originConfig.searchParams) == null ? void 0 : d.get("delay")) ?? 0), (u = this.originConfig.searchParams) != null && u.has("sni") && (t.sni = ((h = this.originConfig.searchParams) == null ? void 0 : h.get("sni")) ?? ""), t;
+    var i, o, s, a, l, c, d, u, f, h, m;
+    if (t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(this.originConfig.port ?? 0), t.type === "hysteria2" && z(t, "password")) {
+      const b = this.originConfig.username || ((o = (i = this.originConfig) == null ? void 0 : i.searchParams) == null ? void 0 : o.get("password"));
+      t.password = b || "default_password";
+    }
+    if ((s = this.originConfig.searchParams) != null && s.has("insecure") && this.originConfig.searchParams.get("insecure") === "1" && (t["skip-cert-verify"] = !0), (a = this.originConfig.searchParams) != null && a.has("mport")) {
+      const b = this.originConfig.searchParams.get("mport");
+      b && (t.ports = b, t.mport = b);
+    }
+    return t.udp = !0, z(t, "down") && (t.down = t.down !== "" ? t.down : ((l = this.originConfig.searchParams) == null ? void 0 : l.get("down")) ?? ((c = this.originConfig.searchParams) == null ? void 0 : c.get("downmbps")) ?? 0), z(t, "up") && (t.up = t.up !== "" ? t.up : ((d = this.originConfig.searchParams) == null ? void 0 : d.get("up")) ?? ((u = this.originConfig.searchParams) == null ? void 0 : u.get("upmbps")) ?? 0), z(t, "delay") && (t.delay = ((f = this.originConfig.searchParams) == null ? void 0 : f.get("delay")) ?? 0), (h = this.originConfig.searchParams) != null && h.has("sni") && (t.sni = ((m = this.originConfig.searchParams) == null ? void 0 : m.get("sni")) ?? ""), t;
   }
   restoreSingbox(t, n) {
-    var i, o;
-    return t.password = ((o = (i = this.originConfig) == null ? void 0 : i.searchParams) == null ? void 0 : o.get("password")) ?? "", t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.tag = n, t.down && (t.down = decodeURIComponent(t.down)), t.up && (t.up = decodeURIComponent(t.up)), t;
+    var o, s, a, l;
+    const i = this.originConfig.username || ((s = (o = this.originConfig) == null ? void 0 : o.searchParams) == null ? void 0 : s.get("password"));
+    if (t.password = i || "default_password", t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.tag = n, (a = this.originConfig.searchParams) != null && a.has("insecure") && this.originConfig.searchParams.get("insecure") === "1" && (t["skip-cert-verify"] = !0), (l = this.originConfig.searchParams) != null && l.has("mport")) {
+      const c = this.originConfig.searchParams.get("mport");
+      c && (t.ports = c, t.mport = c);
+    }
+    return t.udp = !0, t.down && (t.down = decodeURIComponent(t.down)), t.up && (t.up = decodeURIComponent(t.up)), t;
   }
   /**
    * @description 原始备注
@@ -4588,7 +4605,7 @@ class er extends Ne {
   }
 }
 Q = new WeakMap(), Ee = new WeakMap(), B = new WeakMap(), P = new WeakMap(), X = new WeakMap(), de = new WeakMap();
-var Z, Le, $, R, ee, he;
+var Z, Le, D, R, ee, he;
 class tr extends Ne {
   constructor(t) {
     super();
@@ -4597,7 +4614,7 @@ class tr extends Ne {
     /** * @description 混淆链接 */
     x(this, Le, "");
     /** * @description vps原始配置 */
-    x(this, $, {});
+    x(this, D, {});
     /** * @description 混淆配置 */
     x(this, R, {});
     /** * @description 原始备注 */
@@ -4612,21 +4629,21 @@ class tr extends Ne {
    */
   setOriginConfig(t) {
     const n = this.toStandard(t);
-    w(this, Z, n), w(this, $, new URL(n)), w(this, ee, p(this, $).hash ?? "");
+    w(this, Z, n), w(this, D, new URL(n)), w(this, ee, p(this, D).hash ?? "");
   }
   /**
    * @description 更新原始配置
    * @param {string} ps
    */
   updateOriginConfig(t) {
-    p(this, $).hash = t, w(this, ee, t), w(this, Z, p(this, $).href), this.setConfuseConfig(p(this, Z));
+    p(this, D).hash = t, w(this, ee, t), w(this, Z, p(this, D).href), this.setConfuseConfig(p(this, Z));
   }
   /**
    * @description 设置混淆配置
    * @param {string} v
    */
   setConfuseConfig(t) {
-    w(this, R, new URL(this.toStandard(t))), p(this, R).username = this.getUsername(), p(this, R).host = this.getHost(), p(this, R).hostname = this.getHostName(), p(this, R).port = this.getPort(), p(this, R).hash = S.setPs(p(this, ee), p(this, he)), w(this, Le, `ss://${decodeURIComponent(p(this, $).username)}@${p(this, R).hostname}:${p(this, R).port}${p(this, R).search}#${p(this, R).hash}`);
+    w(this, R, new URL(this.toStandard(t))), p(this, R).username = this.getUsername(), p(this, R).host = this.getHost(), p(this, R).hostname = this.getHostName(), p(this, R).port = this.getPort(), p(this, R).hash = k.setPs(p(this, ee), p(this, he)), w(this, Le, `ss://${decodeURIComponent(p(this, D).username)}@${p(this, R).hostname}:${p(this, R).port}${p(this, R).search}#${p(this, R).hash}`);
   }
   restoreClash(t, n) {
     var i;
@@ -4653,7 +4670,7 @@ class tr extends Ne {
    * @description 原始配置
    */
   get originConfig() {
-    return p(this, $);
+    return p(this, D);
   }
   /**
    * @description 混淆备注
@@ -4694,21 +4711,21 @@ class tr extends Ne {
       const c = a.substring(0, l), d = a.substring(l + 1), u = c.indexOf(":");
       if (u === -1)
         throw new Error("Invalid user info: missing colon separator");
-      const h = c.substring(0, u), f = c.substring(u + 1), m = d.lastIndexOf(":");
+      const f = c.substring(0, u), h = c.substring(u + 1), m = d.lastIndexOf(":");
       if (m === -1)
         throw new Error("Invalid server info: missing port");
-      const g = d.substring(0, m), v = d.substring(m + 1);
-      if (!h || !f || !g || !v)
+      const b = d.substring(0, m), v = d.substring(m + 1);
+      if (!f || !h || !b || !v)
         throw new Error("Invalid format: missing required fields");
-      const C = `${h}:${f}`;
-      let ae = `ss://${G(C)}@${g}:${v}`;
+      const C = `${f}:${h}`;
+      let ae = `ss://${G(C)}@${b}:${v}`;
       return ae += "?type=tcp", i && (ae += i), ae;
     } catch {
       return t;
     }
   }
 }
-Z = new WeakMap(), Le = new WeakMap(), $ = new WeakMap(), R = new WeakMap(), ee = new WeakMap(), he = new WeakMap();
+Z = new WeakMap(), Le = new WeakMap(), D = new WeakMap(), R = new WeakMap(), ee = new WeakMap(), he = new WeakMap();
 var te, Oe, V, F, re, fe;
 class rr extends Ne {
   constructor(t) {
@@ -4732,21 +4749,21 @@ class rr extends Ne {
    * @param {string} v
    */
   setOriginConfig(t) {
-    w(this, te, t), w(this, V, new URL(t)), w(this, re, S.formatPs(p(this, V).hash) ?? "");
+    w(this, te, t), w(this, V, new URL(t)), w(this, re, k.formatPs(p(this, V).hash) ?? "");
   }
   /**
    * @description 更新原始配置
    * @param {string} ps
    */
   updateOriginConfig(t) {
-    p(this, V).hash = S.formatPs(t), w(this, re, S.formatPs(t)), w(this, te, p(this, V).href), this.setConfuseConfig(p(this, te));
+    p(this, V).hash = k.formatPs(t), w(this, re, k.formatPs(t)), w(this, te, p(this, V).href), this.setConfuseConfig(p(this, te));
   }
   /**
    * @description 设置混淆配置
    * @param {string} v
    */
   setConfuseConfig(t) {
-    w(this, F, new URL(t)), p(this, F).username = this.getUsername(), p(this, F).host = this.getHost(), p(this, F).hostname = this.getHostName(), p(this, F).port = this.getPort(), p(this, F).hash = S.setPs(p(this, re), p(this, fe)), w(this, Oe, p(this, F).href);
+    w(this, F, new URL(t)), p(this, F).username = this.getUsername(), p(this, F).host = this.getHost(), p(this, F).hostname = this.getHostName(), p(this, F).port = this.getPort(), p(this, F).hash = k.setPs(p(this, re), p(this, fe)), w(this, Oe, p(this, F).href);
   }
   restoreClash(t, n) {
     var i;
@@ -4822,29 +4839,28 @@ class ir extends Ne {
    * @param {string} v
    */
   setOriginConfig(t) {
-    w(this, ie, t), w(this, q, new URL(t)), w(this, ne, S.formatPs(p(this, q).hash) ?? "");
+    w(this, ie, t), w(this, q, new URL(t)), w(this, ne, k.formatPs(p(this, q).hash) ?? "");
   }
   /**
    * @description 更新原始配置
    * @param {string} ps
    */
   updateOriginConfig(t) {
-    p(this, q).hash = S.formatPs(t), w(this, ne, S.formatPs(t)), w(this, ie, p(this, q).href), this.setConfuseConfig(p(this, ie));
+    p(this, q).hash = k.formatPs(t), w(this, ne, k.formatPs(t)), w(this, ie, p(this, q).href), this.setConfuseConfig(p(this, ie));
   }
   /**
    * @description 设置混淆配置
    * @param {string} v
    */
   setConfuseConfig(t) {
-    w(this, U, new URL(t)), p(this, U).username = this.getUsername(), p(this, U).host = this.getHost(), p(this, U).hostname = this.getHostName(), p(this, U).port = this.getPort(), p(this, U).hash = S.setPs(p(this, ne), p(this, me)), w(this, Re, p(this, U).href);
+    w(this, U, new URL(t)), p(this, U).username = this.getUsername(), p(this, U).host = this.getHost(), p(this, U).hostname = this.getHostName(), p(this, U).port = this.getPort(), p(this, U).hash = k.setPs(p(this, ne), p(this, me)), w(this, Re, p(this, U).href);
   }
   restoreClash(t, n) {
     var i, o;
-    return Ye(this, Be, nr).call(this, t), t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(((i = this.originConfig) == null ? void 0 : i.port) ?? 0), t.uuid = this.originConfig.username ?? "", t.alpn = t.alpn ? (o = t.alpn) == null ? void 0 : o.map((s) => decodeURIComponent(s)) : t.alpn, t;
+    return Ye(this, Be, nr).call(this, t), t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(((i = this.originConfig) == null ? void 0 : i.port) ?? 0), t.uuid = this.originConfig.username ?? "", t.alpn = t.alpn ? (o = t.alpn) == null ? void 0 : o.map((s) => decodeURIComponent(s)) : t.alpn, t.udp = !0, t.tfo && delete t.tfo, t;
   }
   restoreSingbox(t, n) {
-    var i, o;
-    return t.tag = n, t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.uuid = this.originConfig.username ?? "", (i = t.tls) != null && i.server_name && (t.tls.server_name = this.originConfig.hostname ?? ""), (o = t.tls) != null && o.alpn && (t.tls.alpn = t.tls.alpn.map((s) => decodeURIComponent(s))), t;
+    return t.tag = n, t.server = this.originConfig.hostname ?? "", t.server_port = Number(this.originConfig.port ?? 0), t.uuid = this.originConfig.username ?? "", t.udp = !0, t.tfo && delete t.tfo, t;
   }
   /**
    * @description 原始备注
@@ -4888,13 +4904,13 @@ class ir extends Ne {
   }
 }
 ie = new WeakMap(), Re = new WeakMap(), q = new WeakMap(), U = new WeakMap(), ne = new WeakMap(), me = new WeakMap(), Be = new WeakSet(), nr = function(t) {
-  var n;
+  var n, i;
   t.network === "ws" && (t["ws-opts"] = {
     ...t["ws-opts"],
     path: decodeURIComponent(((n = this.originConfig.searchParams) == null ? void 0 : n.get("path")) ?? "/"),
     headers: {
       ...t["ws-opts"].headers,
-      Host: this.originConfig.host
+      Host: ((i = this.originConfig.searchParams) == null ? void 0 : i.get("host")) ?? this.originConfig.host
     }
   });
 };
@@ -4936,7 +4952,7 @@ class or extends Ne {
    * @description 设置混淆配置
    */
   setConfuseConfig() {
-    w(this, M, structuredClone(p(this, H))), p(this, M).add = this.getHostName(), p(this, M).port = this.getPort(), p(this, M).id = this.getPassword(), p(this, M).ps = S.setPs(p(this, oe), p(this, ge)), w(this, Te, `vmess://${G(JSON.stringify(p(this, M)))}`);
+    w(this, M, structuredClone(p(this, H))), p(this, M).add = this.getHostName(), p(this, M).port = this.getPort(), p(this, M).id = this.getPassword(), p(this, M).ps = k.setPs(p(this, oe), p(this, ge)), w(this, Te, `vmess://${G(JSON.stringify(p(this, M)))}`);
   }
   restoreClash(t, n) {
     var i, o;
@@ -5008,12 +5024,12 @@ function lo(e) {
   return s && (c += `?${s}`), i && (c += `#${l}`), c;
 }
 function co(e) {
-  if (!e || !e.server || !e.port || !e.password)
-    throw new Error("Hysteria2 configuration object must contain server, port, and password.");
-  const r = e.server, t = e.port, n = e.password, i = e.name || "", o = new URLSearchParams();
+  if (!e || !e.server || !e.port)
+    throw new Error("Hysteria2 configuration object must contain server and port.");
+  const r = e.server, t = e.port, n = e.password || "default_password", i = e.name || "", o = new URLSearchParams();
   o.append("password", n);
   const s = e.sni || e.servername || e.server;
-  s && o.append("sni", s), (e.insecure || e["skip-cert-verify"]) && o.append("insecure", "1"), e.alpn && (typeof e.alpn == "string" || Array.isArray(e.alpn)) && o.append("alpn", Array.isArray(e.alpn) ? e.alpn.join(",") : e.alpn), e.obfs && o.append("obfs", e.obfs), e["obfs-param"] && o.append("obfs-param", e["obfs-param"]), e["obfs-password"] && o.append("obfs-password", e["obfs-password"]);
+  s && o.append("sni", s), (e.insecure || e["skip-cert-verify"] || e["skip-cert-verify"] === !0 || e["skip-cert-verify"] === !1) && o.append("insecure", "1"), e.alpn && (typeof e.alpn == "string" || Array.isArray(e.alpn)) && o.append("alpn", Array.isArray(e.alpn) ? e.alpn.join(",") : e.alpn), e.obfs && o.append("obfs", e.obfs), e["obfs-param"] && o.append("obfs-param", e["obfs-param"]), e["obfs-password"] && o.append("obfs-password", e["obfs-password"]);
   const a = o.toString(), l = encodeURIComponent(r), c = encodeURIComponent(i);
   let d = `hysteria2://${l}:${t}`;
   return a && (d += `?${a}`), i && (d += `#${c}`), d;
@@ -5024,33 +5040,33 @@ function uo(e) {
   const r = e.cipher, t = e.password, n = e.server, i = e.port, o = e.name || "", s = `${r}:${t}`, a = G(s), l = new URLSearchParams(), c = e.network || "tcp";
   if ((c !== "tcp" || e.network) && l.append("type", c), e.tls) {
     l.append("security", "tls");
-    const f = e.sni || e.servername || e.server;
-    f && l.append("sni", f), e["client-fingerprint"] && l.append("fp", e["client-fingerprint"]), e["skip-cert-verify"] && l.append("allowInsecure", "1");
+    const h = e.sni || e.servername || e.server;
+    h && l.append("sni", h), e["client-fingerprint"] && l.append("fp", e["client-fingerprint"]), e["skip-cert-verify"] && l.append("allowInsecure", "1");
   }
   switch (c) {
     case "ws":
     // WebSocket
     case "http": {
-      const f = e["ws-opts"] || e["http-opts"] || {};
+      const h = e["ws-opts"] || e["http-opts"] || {};
       let m;
-      f.headers && f.headers.Host ? m = f.headers.Host : e.sni || e.servername ? m = e.sni || e.servername : m = e.server, m && l.append("host", m);
-      const g = f.path || "/";
-      g !== "/" && l.append("path", g);
+      h.headers && h.headers.Host ? m = h.headers.Host : e.sni || e.servername ? m = e.sni || e.servername : m = e.server, m && l.append("host", m);
+      const b = h.path || "/";
+      b !== "/" && l.append("path", b);
       break;
     }
     case "grpc": {
-      const f = e["grpc-opts"] || {};
-      f.serviceName && l.append("serviceName", f.serviceName);
+      const h = e["grpc-opts"] || {};
+      h.serviceName && l.append("serviceName", h.serviceName);
       break;
     }
   }
   e.tfo && l.append("tfo", "1"), e.udp && l.append("udp", "1");
   const d = encodeURIComponent(n);
   let u = `ss://${a}@${d}:${i}`;
-  const h = l.toString();
-  if (h && (u += `?${h}`), o) {
-    const f = encodeURIComponent(o);
-    u += `#${f}`;
+  const f = l.toString();
+  if (f && (u += `?${f}`), o) {
+    const h = encodeURIComponent(o);
+    u += `#${h}`;
   }
   return u;
 }
@@ -5062,20 +5078,20 @@ function po(e) {
     throw new Error("ShadowsocksR configuration object must contain server, port, protocol, method, obfs, and password.");
   const r = e.server, t = e.port, n = e.protocol, i = e.method || e.cipher, o = e.obfs, s = e.password, a = e["obfs-param"] || "", l = e["protocol-param"] || "", c = e.name || "", d = Pe(s);
   let u = `${r}:${t}:${n}:${i}:${o}:${d}/`;
-  const h = new URLSearchParams();
+  const f = new URLSearchParams();
   if (a) {
     const C = Pe(a);
-    h.append("obfsparam", C);
+    f.append("obfsparam", C);
   }
   if (l) {
     const C = Pe(l);
-    h.append("protoparam", C);
+    f.append("protoparam", C);
   }
-  const f = h.toString();
-  f && (u += `?${f}`);
-  const m = Pe(u), g = encodeURIComponent(c);
+  const h = f.toString();
+  h && (u += `?${h}`);
+  const m = Pe(u), b = encodeURIComponent(c);
   let v = `ssr://${m}`;
-  return c && (v += `#${g}`), v;
+  return c && (v += `#${b}`), v;
 }
 function ho(e) {
   if (!e || !e.server || !e.port || !e.password)
@@ -5087,16 +5103,16 @@ function ho(e) {
     case "ws":
     // WebSocket
     case "http": {
-      const h = e["ws-opts"] || e["http-opts"] || {};
-      let f;
-      h.headers && h.headers.Host ? f = h.headers.Host : e.sni || e.servername ? f = e.sni || e.servername : f = e.server, f && o.append("host", f);
-      const m = h.path || "/";
+      const f = e["ws-opts"] || e["http-opts"] || {};
+      let h;
+      f.headers && f.headers.Host ? h = f.headers.Host : e.sni || e.servername ? h = e.sni || e.servername : h = e.server, h && o.append("host", h);
+      const m = f.path || "/";
       m !== "/" && o.append("path", m);
       break;
     }
     case "grpc": {
-      const h = e["grpc-opts"] || {};
-      h.serviceName && o.append("serviceName", h.serviceName);
+      const f = e["grpc-opts"] || {};
+      f.serviceName && o.append("serviceName", f.serviceName);
       break;
     }
   }
@@ -5105,13 +5121,13 @@ function ho(e) {
   let d = `trojan://${l}@${c}:${n}`;
   const u = o.toString();
   if (u && (d += `?${u}`), i) {
-    const h = encodeURIComponent(i);
-    d += `#${h}`;
+    const f = encodeURIComponent(i);
+    d += `#${f}`;
   }
   return d;
 }
 function fo(e) {
-  var d, u, h, f, m, g;
+  var d, u, f, h, m, b;
   if (e.type !== "vless")
     throw new Error('Configuration type must be "vless"');
   if (!e.uuid || !e.server || !e.port)
@@ -5131,7 +5147,7 @@ function fo(e) {
   }
   switch (s) {
     case "tcp":
-      (f = (h = e["tcp-opts"]) == null ? void 0 : h.header) != null && f.type && e["tcp-opts"].header.type !== "none" && o.set("headerType", e["tcp-opts"].header.type);
+      (h = (f = e["tcp-opts"]) == null ? void 0 : f.header) != null && h.type && e["tcp-opts"].header.type !== "none" && o.set("headerType", e["tcp-opts"].header.type);
       break;
     case "ws":
       e["ws-opts"] && ((m = e["ws-opts"].headers) != null && m.Host && o.set("host", e["ws-opts"].headers.Host), e["ws-opts"].path && o.set("path", encodeURIComponent(e["ws-opts"].path)));
@@ -5144,7 +5160,7 @@ function fo(e) {
       }
       break;
     case "quic":
-      a !== "tls" && a !== "reality" && (o.has("security") || o.set("security", "tls")), e["quic-opts"] && (e["quic-opts"].security && e["quic-opts"].security !== "none" && o.set("quicSecurity", encodeURIComponent(e["quic-opts"].security)), e["quic-opts"].key && o.set("key", encodeURIComponent(e["quic-opts"].key)), (g = e["quic-opts"].header) != null && g.type && e["quic-opts"].header.type !== "none" && o.set("headerType", e["quic-opts"].header.type));
+      a !== "tls" && a !== "reality" && (o.has("security") || o.set("security", "tls")), e["quic-opts"] && (e["quic-opts"].security && e["quic-opts"].security !== "none" && o.set("quicSecurity", encodeURIComponent(e["quic-opts"].security)), e["quic-opts"].key && o.set("key", encodeURIComponent(e["quic-opts"].key)), (b = e["quic-opts"].header) != null && b.type && e["quic-opts"].header.type !== "none" && o.set("headerType", e["quic-opts"].header.type));
       break;
     case "httpupgrade":
       e["httpupgrade-opts"] && (e["httpupgrade-opts"].host && o.set("host", e["httpupgrade-opts"].host), e["httpupgrade-opts"].path && o.set("path", encodeURIComponent(e["httpupgrade-opts"].path)));
@@ -5207,11 +5223,12 @@ function bo(e) {
 class ar extends ao {
   constructor(t, n = [], i = "") {
     super(n);
-    k(this, "urlSet", /* @__PURE__ */ new Set());
-    k(this, "vpsStore", /* @__PURE__ */ new Map());
-    k(this, "originUrls", /* @__PURE__ */ new Set());
-    k(this, "vps", []);
-    k(this, "includeProtocol", []);
+    S(this, "urlSet", /* @__PURE__ */ new Set());
+    S(this, "vpsStore", /* @__PURE__ */ new Map());
+    S(this, "originUrls", /* @__PURE__ */ new Set());
+    S(this, "subscriptionHeaders", /* @__PURE__ */ new Map());
+    S(this, "vps", []);
+    S(this, "includeProtocol", []);
     this.vps = t, this.includeProtocol = i ? JSON.parse(i) : [];
   }
   async parse(t = this.vps) {
@@ -5220,21 +5237,42 @@ class ar extends ao {
         const i = this.updateVpsPs(n);
         if (i) {
           let o = null;
-          i.startsWith("vless://") && this.hasProtocol("vless") ? o = new ir(i) : i.startsWith("vmess://") && this.hasProtocol("vmess") ? o = new or(i) : i.startsWith("trojan://") && this.hasProtocol("trojan") ? o = new rr(i) : i.startsWith("ss://") && this.hasProtocol("shadowsocks") ? o = new tr(i) : this.isHysteria2(i) && this.hasProtocol("hysteria", "hysteria2", "hy2") && (o = new er(i)), o && this.setStore(i, o);
+          i.startsWith("vless://") && this.hasProtocol("vless") ? o = new ir(i) : i.startsWith("vmess://") && this.hasProtocol("vmess") ? o = new or(i) : i.startsWith("trojan://") && this.hasProtocol("trojan") ? o = new rr(i) : i.startsWith("ss://") && this.hasProtocol("shadowsocks") ? o = new tr(i) : this.isHysteria2(i) && this.hasProtocol("hysteria", "hysteria2", "hy2") && (o = new er(i)), o ? this.setStore(i, o) : console.warn(`Failed to create parser for: ${i}`);
         }
-        if (n.startsWith("https://") || n.startsWith("http://")) {
-          const o = await ot(n, { retries: 3 }).then((l) => l.data.text()), { subType: s, content: a } = this.getSubType(o);
-          if (s === "base64" && a && (this.updateExist(Array.from(this.originUrls)), await this.parse(a.split(`
-`).filter(Boolean))), s === "yaml" && a) {
-            const l = a.proxies;
-            if (l.length) {
-              this.updateExist(Array.from(this.originUrls));
-              const c = bo(l);
-              await this.parse(c.filter(Boolean));
+        if (n.startsWith("https://") || n.startsWith("http://"))
+          try {
+            const o = await ot(n, {
+              retries: 3,
+              headers: {
+                "User-Agent": "ClashMeta"
+              }
+            }), s = await o.data.text();
+            try {
+              if (o.headers) {
+                const c = o.headers;
+                let d = null;
+                c.get && typeof c.get == "function" ? d = c.get("subscription-userinfo") : c["subscription-userinfo"] && (d = c["subscription-userinfo"]), d && (this.subscriptionHeaders.set(n, d), console.log(`Found subscription-userinfo for ${n}: ${d}`));
+              }
+            } catch (c) {
+              console.warn(`Failed to access headers for ${n}:`, c);
             }
+            const { subType: a, content: l } = this.getSubType(s);
+            if (a === "base64" && l && (this.updateExist(Array.from(this.originUrls)), await this.parse(l.split(`
+`).filter(Boolean))), a === "yaml" && l) {
+              const c = l.proxies;
+              if (c && c.length) {
+                this.updateExist(Array.from(this.originUrls));
+                const d = bo(c);
+                await this.parse(d.filter(Boolean));
+              } else
+                console.warn(`No proxies found in YAML content from: ${n}`);
+            }
+          } catch (o) {
+            console.error(`Failed to fetch subscription from ${n}:`, o);
+            continue;
           }
-        }
-      } catch {
+      } catch (i) {
+        console.error(`Failed to parse URL ${n}:`, i);
         continue;
       }
   }
@@ -5284,6 +5322,10 @@ class ar extends ao {
   get originVps() {
     return Array.from(this.originUrls);
   }
+  get subscriptionUserinfo() {
+    for (const [t, n] of this.subscriptionHeaders)
+      return n;
+  }
 }
 let go = class {
   async getConfig(r) {
@@ -5311,33 +5353,33 @@ let go = class {
         ...s,
         proxies: s.proxies || [],
         "proxy-groups": s["proxy-groups"] || []
-      }, l = r.reduce((f, m) => {
-        var g;
-        return f + (((g = m.proxies) == null ? void 0 : g.length) || 0);
-      }, 0), c = new Int32Array(l), d = new Set((t = s.proxies) == null ? void 0 : t.map((f) => f.name));
+      }, l = r.reduce((h, m) => {
+        var b;
+        return h + (((b = m.proxies) == null ? void 0 : b.length) || 0);
+      }, 0), c = new Int32Array(l), d = new Set((t = s.proxies) == null ? void 0 : t.map((h) => h.name));
       let u = ((n = s.proxies) == null ? void 0 : n.length) || 0;
-      const h = new Map(a["proxy-groups"].map((f) => [f.name, f]));
-      for (let f = 1; f < r.length; f++) {
-        const m = r[f];
+      const f = new Map(a["proxy-groups"].map((h) => [h.name, h]));
+      for (let h = 1; h < r.length; h++) {
+        const m = r[h];
         if ((i = m.proxies) != null && i.length)
-          for (const g of m.proxies)
-            d.has(g.name) || (a.proxies[u] = g, c[u] = u, d.add(g.name), u++);
+          for (const b of m.proxies)
+            d.has(b.name) || (a.proxies[u] = b, c[u] = u, d.add(b.name), u++);
         if ((o = m["proxy-groups"]) != null && o.length)
-          for (const g of m["proxy-groups"]) {
-            const v = h.get(g.name);
+          for (const b of m["proxy-groups"]) {
+            const v = f.get(b.name);
             if (v) {
               const C = new Set(v.proxies);
-              for (const y of g.proxies || [])
+              for (const y of b.proxies || [])
                 C.add(y);
               v.proxies = Array.from(C), Object.assign(v, {
-                ...g,
+                ...b,
                 proxies: v.proxies
               });
             } else
-              a["proxy-groups"].push(g), h.set(g.name, g);
+              a["proxy-groups"].push(b), f.set(b.name, b);
           }
       }
-      return a.proxies = a.proxies.filter((f, m) => c[m] !== -1), a;
+      return a.proxies = a.proxies.filter((h, m) => c[m] !== -1), a;
     } catch (s) {
       throw new Error(`Failed to merge clash config: ${s.message || s}`);
     }
@@ -5363,7 +5405,7 @@ let go = class {
             if (c.outbounds) {
               const d = `${c.type}:${c.tag}`;
               if (!a.has(d)) {
-                const u = new Set(c.outbounds.filter((h) => !S.isConfigType(h)));
+                const u = new Set(c.outbounds.filter((f) => !k.isConfigType(f)));
                 a.set(d, {
                   base: c,
                   baseOutbounds: u,
@@ -5371,8 +5413,8 @@ let go = class {
                 });
               }
               c.outbounds.forEach((u) => {
-                var h;
-                S.isConfigType(u) && ((h = a.get(d)) == null || h.linkOutbounds.add(u));
+                var f;
+                k.isConfigType(u) && ((f = a.get(d)) == null || f.linkOutbounds.add(u));
               });
             }
         }
@@ -5380,7 +5422,7 @@ let go = class {
         if ((n = l.outbounds) != null && n.length) {
           for (const c of l.outbounds)
             if (!c.outbounds)
-              if (S.isConfigType(c.tag))
+              if (k.isConfigType(c.tag))
                 o.push(c);
               else {
                 const d = `${c.type}:${c.tag}`;
@@ -5408,14 +5450,14 @@ let go = class {
 };
 class xo {
   constructor(r) {
-    k(this, "urls", []);
-    k(this, "vps", []);
-    k(this, "chunkCount", Number(Ie.CHUNK_COUNT));
-    k(this, "backend", Ie.BACKEND);
-    k(this, "parser", null);
-    k(this, "clashClient", new go());
-    k(this, "singboxClient", new vo());
-    k(this, "v2rayClient", new wo(this.vps));
+    S(this, "urls", []);
+    S(this, "vps", []);
+    S(this, "chunkCount", Number(Ie.CHUNK_COUNT));
+    S(this, "backend", Ie.BACKEND);
+    S(this, "parser", null);
+    S(this, "clashClient", new go());
+    S(this, "singboxClient", new vo());
+    S(this, "v2rayClient", new wo(this.vps));
     this.chunkCount = Number(r.CHUNK_COUNT ?? Ie.CHUNK_COUNT), this.backend = r.BACKEND ?? Ie.BACKEND, this.parser = null;
   }
   async setSubUrls(r) {
@@ -5440,10 +5482,14 @@ class xo {
     var r;
     return (r = this.parser) == null ? void 0 : r.vpsMap;
   }
+  get subscriptionUserinfo() {
+    var r;
+    return (r = this.parser) == null ? void 0 : r.subscriptionUserinfo;
+  }
 }
 class yo {
   constructor(r) {
-    k(this, "confuseConfig");
+    S(this, "confuseConfig");
     this.confuseConfig = r;
   }
   getOriginConfig(r) {
@@ -5460,7 +5506,7 @@ class yo {
       return n;
     for (const i of r)
       try {
-        const [o, s] = S.getPs(i.name);
+        const [o, s] = k.getPs(i.name);
         if (t.has(s)) {
           const a = t.get(s);
           a == null || a.restoreClash(i, o), n.push(i);
@@ -5474,7 +5520,7 @@ class yo {
   updateProxiesGroups(r) {
     try {
       return r.map((t) => {
-        const [n] = S.getPs(t);
+        const [n] = k.getPs(t);
         return n;
       });
     } catch (t) {
@@ -5484,7 +5530,7 @@ class yo {
 }
 class Co {
   constructor(r) {
-    k(this, "confuseConfig");
+    S(this, "confuseConfig");
     this.confuseConfig = r;
   }
   getOriginConfig(r) {
@@ -5501,7 +5547,7 @@ class Co {
     for (const i of r)
       try {
         if (this.isConfuseVps(i.tag)) {
-          const [o, s] = S.getPs(i.tag), a = t.get(s);
+          const [o, s] = k.getPs(i.tag), a = t.get(s);
           a == null || a.restoreSingbox(i, o);
         }
         Reflect.has(i, "outbounds") && (i.outbounds = this.updateOutbouns(i.outbounds)), n.push(i);
@@ -5515,7 +5561,7 @@ class Co {
     try {
       return r.map((t) => {
         if (this.isConfuseVps(t)) {
-          const [n] = S.getPs(t);
+          const [n] = k.getPs(t);
           return n;
         }
         return t;
@@ -5525,12 +5571,12 @@ class Co {
     }
   }
   isConfuseVps(r) {
-    return S.isConfigType(r);
+    return k.isConfigType(r);
   }
 }
 class _o {
   constructor(r) {
-    k(this, "confuseConfig");
+    S(this, "confuseConfig");
     this.confuseConfig = r;
   }
   getOriginConfig() {
@@ -5567,34 +5613,34 @@ class ko {
       const i = new xo(t);
       await i.setSubUrls(r);
       const o = new So(i);
-      if (["clash", "clashr"].includes(n)) {
-        const s = await o.getClashConfig();
-        return new Response(to(s, { indent: 2, lineWidth: 200 }), {
+      let s, a;
+      if (i.subscriptionUserinfo && (a = i.subscriptionUserinfo), ["clash", "clashr"].includes(n)) {
+        const l = await o.getClashConfig();
+        s = new Response(to(l, { indent: 2, lineWidth: 200 }), {
           headers: new Headers({
             "Content-Type": "text/yaml; charset=UTF-8",
             "Cache-Control": "no-store"
           })
         });
-      }
-      if (n === "singbox") {
-        const s = await o.getSingboxConfig();
-        return new Response(JSON.stringify(s), {
+      } else if (n === "singbox") {
+        const l = await o.getSingboxConfig();
+        s = new Response(JSON.stringify(l), {
           headers: new Headers({
             "Content-Type": "text/plain; charset=UTF-8",
             "Cache-Control": "no-store"
           })
         });
-      }
-      if (n === "v2ray") {
-        const s = await o.getV2RayConfig();
-        return new Response(s, {
+      } else if (n === "v2ray") {
+        const l = await o.getV2RayConfig();
+        s = new Response(l, {
           headers: new Headers({
             "Content-Type": "text/plain; charset=UTF-8",
             "Cache-Control": "no-store"
           })
         });
-      }
-      return _.error("Unsupported client type, support list: clash, singbox, v2ray");
+      } else
+        return _.error("Unsupported client type, support list: clash, singbox, v2ray");
+      return a && s.headers.set("subscription-userinfo", a), s;
     } catch (i) {
       throw new Error(i.message || "Invalid request");
     }
