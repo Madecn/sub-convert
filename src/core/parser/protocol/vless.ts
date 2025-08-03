@@ -72,7 +72,7 @@ export class VlessParser extends Faker {
                 path: decodeURIComponent(this.originConfig.searchParams?.get('path') ?? '/'),
                 headers: {
                     ...proxy['ws-opts'].headers,
-                    Host: this.originConfig.host
+                    Host: this.originConfig.searchParams?.get('host') ?? this.originConfig.host
                 }
             };
         }
@@ -85,6 +85,15 @@ export class VlessParser extends Faker {
         proxy.port = Number(this.originConfig?.port ?? 0);
         proxy.uuid = this.originConfig.username ?? '';
         proxy.alpn = proxy.alpn ? proxy.alpn?.map((i: string) => decodeURIComponent(i)) : proxy.alpn;
+        
+        // 添加udp字段
+        proxy.udp = true;
+        
+        // 移除tfo字段
+        if (proxy.tfo) {
+            delete proxy.tfo;
+        }
+        
         return proxy;
     }
 
@@ -93,12 +102,15 @@ export class VlessParser extends Faker {
         outbound.server = this.originConfig.hostname ?? '';
         outbound.server_port = Number(this.originConfig.port ?? 0);
         outbound.uuid = this.originConfig.username ?? '';
-        if (outbound.tls?.server_name) {
-            outbound.tls.server_name = this.originConfig.hostname ?? '';
+        
+        // 添加udp字段
+        outbound.udp = true;
+        
+        // 移除tfo字段
+        if (outbound.tfo) {
+            delete outbound.tfo;
         }
-        if (outbound.tls?.alpn) {
-            outbound.tls.alpn = outbound.tls.alpn.map((i: string) => decodeURIComponent(i));
-        }
+        
         return outbound;
     }
 

@@ -20,6 +20,7 @@ export class Parser extends Convert {
     private urlSet: Set<string> = new Set<string>();
     private vpsStore: Map<string, ParserType> = new Map();
     private originUrls: Set<string> = new Set<string>();
+    private subscriptionHeaders: Map<string, string> = new Map<string, string>();
 
     private vps: string[] = [];
     private includeProtocol: string[] = [];
@@ -52,28 +53,67 @@ export class Parser extends Convert {
 
                     if (parser) {
                         this.setStore(processVps, parser);
+                    } else {
+                        console.warn(`Failed to create parser for: ${processVps}`);
                     }
                 }
 
                 if (v.startsWith('https://') || v.startsWith('http://')) {
-                    const subContent = await fetchWithRetry(v, { retries: 3 }).then(r => r.data.text());
-                    const { subType, content } = this.getSubType(subContent);
-
-                    if (subType === 'base64' && content) {
-                        this.updateExist(Array.from(this.originUrls));
-                        await this.parse(content.split('\n').filter(Boolean));
-                    }
-
-                    if (subType === 'yaml' && content) {
-                        const proxies = content.proxies;
-                        if (proxies.length) {
-                            this.updateExist(Array.from(this.originUrls));
-                            const vps = getYamlProxies(proxies);
-                            await this.parse(vps.filter(Boolean));
+                    try {
+                        const response = await fetchWithRetry(v, { 
+                            retries: 3,
+                            headers: {
+                                'User-Agent': 'ClashMeta'
+                            }
+                        });
+                        const subContent = await response.data.text();
+                        
+                        // 保存订阅头信息
+                        try {
+                            if (response.headers) {
+                                // 使用类型断言访问headers
+                                const headers = response.headers as any;
+                                let subscriptionUserinfo = null;
+                                
+                                if (headers.get && typeof headers.get === 'function') {
+                                    subscriptionUserinfo = headers.get('subscription-userinfo');
+                                } else if (headers['subscription-userinfo']) {
+                                    subscriptionUserinfo = headers['subscription-userinfo'];
+                                }
+                                
+                                if (subscriptionUserinfo) {
+                                    this.subscriptionHeaders.set(v, subscriptionUserinfo);
+                                    console.log(`Found subscription-userinfo for ${v}: ${subscriptionUserinfo}`);
+                                }
+                            }
+                        } catch (headerError) {
+                            console.warn(`Failed to access headers for ${v}:`, headerError);
                         }
+                        
+                        const { subType, content } = this.getSubType(subContent);
+
+                        if (subType === 'base64' && content) {
+                            this.updateExist(Array.from(this.originUrls));
+                            await this.parse(content.split('\n').filter(Boolean));
+                        }
+
+                        if (subType === 'yaml' && content) {
+                            const proxies = content.proxies;
+                            if (proxies && proxies.length) {
+                                this.updateExist(Array.from(this.originUrls));
+                                const vps = getYamlProxies(proxies);
+                                await this.parse(vps.filter(Boolean));
+                            } else {
+                                console.warn(`No proxies found in YAML content from: ${v}`);
+                            }
+                        }
+                    } catch (error) {
+                        console.error(`Failed to fetch subscription from ${v}:`, error);
+                        continue;
                     }
                 }
-            } catch {
+            } catch (error) {
+                console.error(`Failed to parse URL ${v}:`, error);
                 continue;
             }
         }
@@ -137,6 +177,14 @@ export class Parser extends Convert {
 
     public get originVps(): string[] {
         return Array.from(this.originUrls);
+    }
+
+    public get subscriptionUserinfo(): string | undefined {
+        // 返回第一个找到的订阅头信息
+        for (const [_, header] of this.subscriptionHeaders) {
+            return header;
+        }
+        return undefined;
     }
 }
 

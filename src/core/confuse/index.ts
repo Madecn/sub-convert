@@ -61,5 +61,9 @@ export class Confuse {
     get vpsStore(): VpsMap | undefined {
         return this.parser?.vpsMap;
     }
+
+    get subscriptionUserinfo(): string | undefined {
+        return this.parser?.subscriptionUserinfo;
+    }
 }
 

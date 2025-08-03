@@ -8,7 +8,11 @@ export function getRemoteConfig(env: Env): { label: string; value: string }[] {
             });
             return acc;
         },
-        [
+        [   
+            {
+                label: '自用默认分组',
+                value: 'https://raw.githubusercontent.com/Madecn/Online_ACL4SSR/refs/heads/main/ACL4SSR_Online_MultiMode.ini'
+            },
             {
                 label: 'ACL4SSR_Online 默认版 分组比较全 (与Github同步)',
                 value: 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online.ini'

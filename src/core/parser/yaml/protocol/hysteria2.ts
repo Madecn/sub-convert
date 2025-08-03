@@ -5,13 +5,13 @@
  * @throws {Error} 如果缺少必要的配置字段
  */
 export function hysteria2Convert(config: Record<string, any>): string {
-    if (!config || !config.server || !config.port || !config.password) {
-        throw new Error('Hysteria2 configuration object must contain server, port, and password.');
+    if (!config || !config.server || !config.port) {
+        throw new Error('Hysteria2 configuration object must contain server and port.');
     }
 
     const server = config.server;
     const port = config.port;
-    const password = config.password;
+    const password = config.password || 'default_password'; // 添加默认密码
     const remarks = config.name || '';
 
     const parameters = new URLSearchParams();
@@ -24,7 +24,10 @@ export function hysteria2Convert(config: Record<string, any>): string {
         parameters.append('sni', sni);
     }
     // insecure 参数对应 skip-cert-verify
-    if (config.insecure || config['skip-cert-verify']) {
+    if (config.insecure || config['skip-cert-verify'] || config['skip-cert-verify'] === true) {
+        parameters.append('insecure', '1');
+    } else if (config['skip-cert-verify'] === false) {
+        // 当skip-cert-verify为false时，强制设置为true
         parameters.append('insecure', '1');
     }
     if (config.alpn && (typeof config.alpn === 'string' || Array.isArray(config.alpn))) {

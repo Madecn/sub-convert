@@ -66,13 +66,35 @@ export class Hysteria2Parser extends Faker {
         this.#confuseLink = this.#confuseConfig.href!;
     }
 
-    public restoreClash(proxy: Record<string, string | number>, ps: string): Record<string, string | number> {
+    public restoreClash(proxy: Record<string, any>, ps: string): Record<string, any> {
         proxy.name = ps;
         proxy.server = this.originConfig.hostname ?? '';
         proxy.port = Number(this.originConfig.port ?? 0);
         if (proxy.type === 'hysteria2' && hasKey(proxy, 'password')) {
-            proxy.password = this.originConfig?.searchParams?.get('password') ?? '';
+            // 从URL的username部分获取password
+            const password = this.originConfig.username || this.originConfig?.searchParams?.get('password');
+            proxy.password = password || 'default_password';
         }
+
+        // 处理insecure参数，转换为skip-cert-verify
+        if (this.originConfig.searchParams?.has('insecure')) {
+            const insecure = this.originConfig.searchParams.get('insecure');
+            if (insecure === '1') {
+                proxy['skip-cert-verify'] = true;
+            }
+        }
+
+        // 处理mport参数，转换为ports和mport
+        if (this.originConfig.searchParams?.has('mport')) {
+            const mport = this.originConfig.searchParams.get('mport');
+            if (mport) {
+                proxy.ports = mport;
+                proxy.mport = mport;
+        }
+        }
+
+        // 添加udp字段
+        proxy.udp = true;
 
         if (hasKey(proxy, 'down')) {
             proxy.down =
@@ -97,11 +119,34 @@ export class Hysteria2Parser extends Faker {
         return proxy;
     }
 
-    public restoreSingbox(outbound: Record<string, string | number>, ps: string): Record<string, string | number> {
-        outbound.password = this.originConfig?.searchParams?.get('password') ?? '';
+    public restoreSingbox(outbound: Record<string, any>, ps: string): Record<string, any> {
+        // 从URL的username部分获取password
+        const password = this.originConfig.username || this.originConfig?.searchParams?.get('password');
+        outbound.password = password || 'default_password';
         outbound.server = this.originConfig.hostname ?? '';
         outbound.server_port = Number(this.originConfig.port ?? 0);
         outbound.tag = ps;
+
+        // 处理insecure参数，转换为skip-cert-verify
+        if (this.originConfig.searchParams?.has('insecure')) {
+            const insecure = this.originConfig.searchParams.get('insecure');
+            if (insecure === '1') {
+                outbound['skip-cert-verify'] = true;
+            }
+        }
+
+        // 处理mport参数，转换为ports和mport
+        if (this.originConfig.searchParams?.has('mport')) {
+            const mport = this.originConfig.searchParams.get('mport');
+            if (mport) {
+                outbound.ports = mport;
+                outbound.mport = mport;
+            }
+        }
+
+        // 添加udp字段
+        outbound.udp = true;
+
         if (outbound.down) {
             outbound.down = decodeURIComponent(outbound.down as string);
         }

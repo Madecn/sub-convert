@@ -13,37 +13,48 @@ export class UrlService {
             await confuse.setSubUrls(request);
 
             const restore = new Restore(confuse);
+            let response: Response;
+            let subscriptionUserinfo: string | undefined;
+
+            // 获取订阅头信息
+            if (confuse.subscriptionUserinfo) {
+                subscriptionUserinfo = confuse.subscriptionUserinfo;
+            }
+
             if (['clash', 'clashr'].includes(convertType)) {
                 const originConfig = await restore.getClashConfig();
-                return new Response(dump(originConfig, { indent: 2, lineWidth: 200 }), {
+                response = new Response(dump(originConfig, { indent: 2, lineWidth: 200 }), {
                     headers: new Headers({
                         'Content-Type': 'text/yaml; charset=UTF-8',
                         'Cache-Control': 'no-store'
                     })
                 });
-            }
-
-            if (convertType === 'singbox') {
+            } else if (convertType === 'singbox') {
                 const originConfig = await restore.getSingboxConfig();
-                return new Response(JSON.stringify(originConfig), {
+                response = new Response(JSON.stringify(originConfig), {
                     headers: new Headers({
                         'Content-Type': 'text/plain; charset=UTF-8',
                         'Cache-Control': 'no-store'
                     })
                 });
-            }
-
-            if (convertType === 'v2ray') {
+            } else if (convertType === 'v2ray') {
                 const originConfig = await restore.getV2RayConfig();
-                return new Response(originConfig, {
+                response = new Response(originConfig, {
                     headers: new Headers({
                         'Content-Type': 'text/plain; charset=UTF-8',
                         'Cache-Control': 'no-store'
                     })
                 });
+            } else {
+            return ResponseUtil.error('Unsupported client type, support list: clash, singbox, v2ray');
             }
 
-            return ResponseUtil.error('Unsupported client type, support list: clash, singbox, v2ray');
+            // 添加订阅头信息到响应
+            if (subscriptionUserinfo) {
+                response.headers.set('subscription-userinfo', subscriptionUserinfo);
+            }
+
+            return response;
         } catch (error: any) {
             throw new Error(error.message || 'Invalid request');
         }
