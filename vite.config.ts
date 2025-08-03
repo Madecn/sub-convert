@@ -8,7 +8,10 @@ export default defineConfig({
             fileName: `_worker`
         },
         minify: true,
-        outDir: 'pages'
+        outDir: 'pages',
+        rollupOptions: {
+            external: ['@hono/node-server', 'hono', 'hono/cors', 'hono/logger']
+        }
     }
 });
 
