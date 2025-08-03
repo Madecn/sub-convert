@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  sub-convert:
+    build: .
+    container_name: sub-convert
+    restart: unless-stopped
+    ports:
+      - "8787:8787"
+    environment:
+      # 环境变量配置
+      - NODE_ENV=production
+      # 可选：自定义后端服务地址
+      # - BACKEND=https://your-backend-url.com
+      # 可选：自定义远程配置
+      # - REMOTE_CONFIG=https://your-remote-config.com
+      # 可选：数据库配置（如果使用短链服务）
+      # - DB=your-database-url
+    volumes:
+      # 可选：挂载配置文件
+      # - ./config:/app/config
+      # 可选：挂载日志目录
+      - ./logs:/app/logs
+    networks:
+      - sub-convert-network
+
+networks:
+  sub-convert-network:
+    driver: bridge 
